@@ -8,7 +8,7 @@ export default {
   components: {
     Bookmark,
     BookmarkCreator
-},
+  },
   data() {
     return {
       bookmarkList: Array,
@@ -26,7 +26,7 @@ export default {
       const arr = []
       this.bookmarkList.forEach(bookmark => {
         const searchCondition = bookmark.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
-                          bookmark.shortForm.toLowerCase().includes(this.searchText.toLowerCase())
+          bookmark.shortForm.toLowerCase().includes(this.searchText.toLowerCase())
         if (searchCondition) {
           arr.push(bookmark)
         }
@@ -63,7 +63,11 @@ export default {
     <BookmarkCreator v-if="showCreator" @addBookmark="addBookmark" @hideBookmarkCreator="toggleBookmarkCreator" />
   </Transition>
   <input type="text" v-model="searchText" @keyup="searchBookmarks" @keyup.enter="submitSearch">
-  <Bookmark v-for="bookmark in bookmarkList" :bookmark="bookmark" />
+  <div class="bookmarks-container">
+    <TransitionGroup name="bookmarks">
+      <Bookmark v-for="(bookmark, index) in searchedList" :bookmark="bookmark" :key="bookmark.shortForm" :data-index="index" />
+    </TransitionGroup>
+  </div>
 </template>
 
 <style scoped>
@@ -75,5 +79,29 @@ export default {
 .creator-enter-from,
 .creator-leave-to {
   opacity: 0;
+}
+
+.bookmarks-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 240px;
+  left: 240px;
+}
+
+.bookmarks-move,
+.bookmarks-enter-active,
+.bookmarks.leave-active {
+  transition: all 0.167s ease-in;
+}
+
+.bookmarks-enter-from,
+.bookmarks-leave-to {
+  opacity: 0;
+  /* translate: 16px; */
+}
+
+.bookmarks-leave-active {
+  position: absolute;
 }
 </style>

@@ -27,12 +27,8 @@ export default {
 </template>
 
 <style scoped>
-.bookmarks-container {
-    display: flex;
-    flex-direction: column;
-}
-
 .bookmark {
     text-align: center;
+    width: 480px;
 }
 </style>
