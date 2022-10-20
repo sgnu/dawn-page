@@ -20,6 +20,7 @@ export default {
   },
   created() {
     this.bookmarkList = examples
+    this.sortBookmarks()
     this.searchedList = this.bookmarkList
   },
   methods: {
@@ -64,8 +65,13 @@ export default {
 
     addBookmark(bookmark) {
       this.bookmarkList.push(bookmark)
+      this.sortBookmarks()
       this.toggleBookmarkCreator(false)
       this.searchBookmarks()
+    },
+
+    sortBookmarks() {
+      this.bookmarkList.sort((a, b) => { return (a.shortForm.toLowerCase() > b.shortForm.toLowerCase())})
     },
 
     toggleBookmarkCreator(toggled) {
