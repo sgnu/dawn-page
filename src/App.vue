@@ -31,13 +31,14 @@ export default {
 
       this.searchedList = arr
     },
+
     submitSearch() {
       if (this.searchedList[0]) {
-        window.alert(this.searchedList[0].name)
+        window.alert(`This will open ${this.searchedList[0].name} at ${this.searchedList[0].url}`)
       } else {
         window.alert(`This will search for ${this.searchText}!`)
       }
-    }
+    },
   }
 }
 </script>
