@@ -118,11 +118,22 @@ export default {
 }
 
 #search-bar {
-  border: none;
+  box-sizing: border-box;
+  border-bottom: 2px solid #bac2de;
+  color: #bac2de;
+
+  font-size: 24px;
+
+  width: 240px;
+  height: 28px;
+
+  transition: border 0.167s ease-out,
+    color 0.167s ease-out
 }
 
 #search-bar:focus {
-  border: none !important;
+  border-color: #f5c2e7;
+  color: #f5c2e7;
 }
 
 .main-container {
