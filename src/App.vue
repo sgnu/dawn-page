@@ -13,7 +13,8 @@ export default {
     return {
       bookmarkList: Array,
       searchedList: Array,
-      searchText: ''
+      searchText: '',
+      showCreator: false,
     }
   },
   created() {
@@ -44,8 +45,12 @@ export default {
 
     addBookmark(bookmark) {
       this.bookmarkList.push(bookmark)
-      console.log(bookmark)
+      this.toggleBookmarkCreator(true)
       this.searchBookmarks()
+    },
+
+    toggleBookmarkCreator(toggled) {
+      this.showCreator = toggled
     }
   }
 }
@@ -53,10 +58,22 @@ export default {
 
 <template>
   <h1>Hello World!</h1>
-  <BookmarkCreator @addBookmark="addBookmark" />
+  <input type="button" value="Show Creator" @click="toggleBookmarkCreator(true)">
+  <Transition name="creator">
+    <BookmarkCreator v-if="showCreator" @addBookmark="addBookmark" @hideBookmarkCreator="toggleBookmarkCreator" />
+  </Transition>
   <input type="text" v-model="searchText" @keyup="searchBookmarks" @keyup.enter="submitSearch">
   <Bookmark :bookmarks="searchedList" />
 </template>
 
 <style scoped>
+.creator-enter-active,
+.creator-leave-active {
+  transition: opacity 0.167s ease-in
+}
+
+.creator-enter-from,
+.creator-leave-to {
+  opacity: 0;
+}
 </style>
