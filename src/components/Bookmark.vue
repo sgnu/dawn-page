@@ -19,11 +19,11 @@ export default {
 </script>
 
 <template>
-        <div class="bookmark" v-on:click="openWindow">
-            <h1 class="short-form" :style="{ 'color': bookmark.color }">{{ bookmark.shortForm }}</h1>
-            <p class="name">{{ bookmark.name }}</p>
-            <p class="url">{{ bookmark.url }}</p>
-        </div>
+    <div class="bookmark" v-on:click="openWindow">
+        <h1 class="short-form" :style="{ 'color': bookmark.color }">{{ bookmark.shortForm }}</h1>
+        <p class="name">{{ bookmark.name }}</p>
+        <p class="url">{{ bookmark.url }}</p>
+    </div>
 </template>
 
 <style scoped>
