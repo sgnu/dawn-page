@@ -33,7 +33,7 @@ export default {
     box-shadow: 2px 2px 8px 4px rgba(0, 0, 0, .33);
 
     text-align: center;
-    width: 240px;
+    width: 200px;
     padding: 4px 20px;
 
     cursor: pointer;
@@ -52,7 +52,7 @@ export default {
 }
 
 .selected {
-    background-color: #2b2b3f;
+    background-color: #3d3d4c;
     box-shadow: 2px 18px 16px 2px rgba(0, 0, 0, .18);
     /* translate: 0 -16px; */
 }

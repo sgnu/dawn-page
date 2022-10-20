@@ -87,19 +87,22 @@ export default {
   <Transition name="creator">
     <BookmarkCreator v-if="showCreator" @addBookmark="addBookmark" @hideBookmarkCreator="toggleBookmarkCreator" />
   </Transition>
-  <input type="text"
+  <input id="search-bar"
+    type="text"
     v-model="searchText"
     @keyup="searchBookmarks"
     @keyup.enter="submitSearch"
     @keydown.tab.exact.prevent="cycleBookmarks(true)"
     @keydown.tab.shift.exact.prevent="cycleBookmarks(false)">
-  <div class="bookmarks-container">
-    <TransitionGroup name="bookmarks">
-      <Bookmark v-for="(bookmark, index) in searchedList"
-        :bookmark="bookmark" :key="bookmark.shortForm"
-        :data-index="index"
-        :selected="searchedList.length !== 0 && bookmark.shortForm === searchedList[selectedIndex].shortForm" />
-    </TransitionGroup>
+  <div class="main-container">
+    <div class="bookmarks-container">
+      <TransitionGroup name="bookmarks">
+        <Bookmark v-for="(bookmark, index) in searchedList"
+          :bookmark="bookmark" :key="bookmark.shortForm"
+          :data-index="index"
+          :selected="searchedList.length !== 0 && bookmark.shortForm === searchedList[selectedIndex].shortForm" />
+      </TransitionGroup>
+    </div>
   </div>
 </template>
 
@@ -114,17 +117,30 @@ export default {
   opacity: 0;
 }
 
+#search-bar {
+  border: none;
+}
+
+#search-bar:focus {
+  border: none !important;
+}
+
+.main-container {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  justify-content: center;
+  justify-items: start;
+
+  width: 80vw;
+  max-width: 1280px;
+}
+
 .bookmarks-container {
   display: flex;
   flex-wrap: wrap;
   gap: 8px 8px;
-
-  position: absolute;
-  padding: 32px;
-  top: 240px;
-  left: 0;
-
-  max-width: 960px;
+  justify-content: flex-start;
 }
 
 .bookmarks-move,
