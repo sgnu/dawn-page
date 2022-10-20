@@ -6,6 +6,14 @@ export default {
     components: {
         ColorPicker
     },
+    props: {
+        bookmark: {
+            color: String,
+            name: String,
+            shortForm: String,
+            url: String
+        }
+    },
     emits: ['addBookmark', 'hideBookmarkCreator'],
     data() {
         return {
@@ -13,6 +21,14 @@ export default {
             name: '',
             shortForm: '',
             url: '',
+        }
+    },
+    mounted() {
+        if (this.bookmark) {
+            this.color = this.bookmark.color
+            this.name = this.bookmark.name
+            this.shortForm = this.bookmark.shortForm
+            this.url = this.bookmark.url
         }
     },
     methods: {
@@ -27,9 +43,8 @@ export default {
             this.url = ''
         },
 
-        modalClick(e) {
-            e.preventDefault()
-            e.stopPropagation()
+        getBookmark() {
+            return this.bookmark
         }
     }
 }

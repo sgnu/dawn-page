@@ -10,6 +10,7 @@ export default {
         },
         selected: false,
     },
+    emits: ['editBookmark'],
     methods: {
         openWindow() {
             window.alert(`This will open ${this.bookmark.name} at ${this.bookmark.url}`)
@@ -23,6 +24,7 @@ export default {
     <div class="bookmark" v-on:click="openWindow" v-bind:class="{selected: selected}">
         <h1 class="short-form" :style="{ 'color': bookmark.color }">{{ bookmark.shortForm }}</h1>
         <p class="name">{{ bookmark.name }}</p>
+        <p class="edit" @click.stop.prevent="$emit('editBookmark', bookmark)">Edit</p>
     </div>
 </template>
 
@@ -54,6 +56,25 @@ export default {
 
 .selected {
     background-color: var(--ctp-mocha-surface0);
+}
+
+.edit {
+    color: var(--ctp-mocha-subtext0);
+    opacity: 0;
+
+    position: absolute;
+    top: 2px;
+    right: 8px;
+    transition: opacity 0.167s ease-out,
+        color 0.167s ease-out
+}
+
+.bookmark:hover .edit {
+    opacity: 1;
+}
+
+.edit:hover {
+    color: var(--ctp-mocha-blue)
 }
 
 h1 {

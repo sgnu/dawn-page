@@ -18,6 +18,7 @@ export default {
       searchText: '',
       showCreator: false,
       selectedIndex: 0,
+      tempBookmark: undefined
     }
   },
   created() {
@@ -66,10 +67,27 @@ export default {
     },
 
     addBookmark(bookmark) {
+      if (this.tempBookmark) {  // finished editing a pre-existing bookmark
+        this.bookmarkList = this.bookmarkList.filter(bookmark => {
+          return bookmark.name !== this.tempBookmark.name &&
+          bookmark.url !== this.tempBookmark.url &&
+          bookmark.shortForm !== this.tempBookmark.shortForm
+        })
+
+        this.tempBookmark = undefined
+      }
+
       this.bookmarkList.push(bookmark)
       this.sortBookmarks()
       this.toggleBookmarkCreator(false)
       this.searchBookmarks()
+    },
+
+    editBookmark(bookmark) {
+      this.tempBookmark = bookmark
+      this.toggleBookmarkCreator(true)
+
+      console.log(bookmark)
     },
 
     sortBookmarks() {
@@ -96,7 +114,10 @@ export default {
   <h1>Hello World!</h1>
   <input type="button" value="Show Creator" @click="toggleBookmarkCreator(true)">
   <Transition name="creator">
-    <BookmarkCreator v-if="showCreator" @addBookmark="addBookmark" @hideBookmarkCreator="toggleBookmarkCreator" />
+    <BookmarkCreator v-if="showCreator"
+      :bookmark="tempBookmark"
+      @addBookmark="addBookmark"
+      @hideBookmarkCreator="toggleBookmarkCreator" />
   </Transition>
   <input id="search-bar"
     type="text"
@@ -110,6 +131,7 @@ export default {
       <TransitionGroup name="bookmarks"
         @before-leave="bookmarksBeforeLeave">
         <Bookmark v-for="(bookmark, index) in searchedList"
+          @editBookmark="editBookmark"
           :bookmark="bookmark" :key="bookmark.shortForm"
           :data-index="index"
           :selected="searchedList.length !== 0 && bookmark.shortForm === searchedList[selectedIndex].shortForm" />
