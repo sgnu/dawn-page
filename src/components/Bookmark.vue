@@ -28,7 +28,7 @@ export default {
 
 <style scoped>
 .bookmark {
-    background-color: #272732;
+    background-color: #1e1e2e;
     border-radius: 4px;
     box-shadow: 2px 2px 8px 4px rgba(0, 0, 0, .33);
 
@@ -52,7 +52,7 @@ export default {
 }
 
 .selected {
-    background-color: #3d3d4c;
+    background-color: #313244;
     box-shadow: 2px 18px 16px 2px rgba(0, 0, 0, .18);
     /* translate: 0 -16px; */
 }
