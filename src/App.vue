@@ -15,6 +15,7 @@ export default {
       searchedList: Array,
       searchText: '',
       showCreator: false,
+      selectedIndex: 0,
     }
   },
   created() {
@@ -22,7 +23,10 @@ export default {
     this.searchedList = this.bookmarkList
   },
   methods: {
-    searchBookmarks() {
+    searchBookmarks(event) {
+      if (event && event.keyCode === 8 || (event.keyCode >= 48 && event.keyCode <= 90)) {  // alphanumeric keycodes are 48 to 90 inclusive; 8 is backspace
+        this.selectedIndex = 0
+      } 
       const arr = []
       this.bookmarkList.forEach(bookmark => {
         const searchCondition = bookmark.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
@@ -36,16 +40,29 @@ export default {
     },
 
     submitSearch() {
-      if (this.searchedList[0]) {
-        window.alert(`This will open ${this.searchedList[0].name} at ${this.searchedList[0].url}`)
+      if (this.searchedList[this.selectedIndex]) {
+        window.alert(`This will open ${this.searchedList[this.selectedIndex].name} at ${this.searchedList[this.selectedIndex].url}`)
       } else {
         window.alert(`This will search for ${this.searchText}!`)
       }
     },
 
+    cycleBookmarks(goForward) {
+      if (goForward) {
+        this.selectedIndex = (this.selectedIndex + 1) % this.searchedList.length
+      } else {
+        // javascript doesn't handle negative modulo properly
+        if (this.selectedIndex === 0) {
+          this.selectedIndex = this.searchedList.length -1
+        } else {
+          this.selectedIndex = (this.selectedIndex - 1) % this.searchedList.length
+        }
+      }
+    },
+
     addBookmark(bookmark) {
       this.bookmarkList.push(bookmark)
-      this.toggleBookmarkCreator(true)
+      this.toggleBookmarkCreator(false)
       this.searchBookmarks()
     },
 
@@ -62,10 +79,18 @@ export default {
   <Transition name="creator">
     <BookmarkCreator v-if="showCreator" @addBookmark="addBookmark" @hideBookmarkCreator="toggleBookmarkCreator" />
   </Transition>
-  <input type="text" v-model="searchText" @keyup="searchBookmarks" @keyup.enter="submitSearch">
+  <input type="text"
+    v-model="searchText"
+    @keyup="searchBookmarks"
+    @keyup.enter="submitSearch"
+    @keydown.tab.exact.prevent="cycleBookmarks(true)"
+    @keydown.tab.shift.exact.prevent="cycleBookmarks(false)">
   <div class="bookmarks-container">
     <TransitionGroup name="bookmarks">
-      <Bookmark v-for="(bookmark, index) in searchedList" :bookmark="bookmark" :key="bookmark.shortForm" :data-index="index" />
+      <Bookmark v-for="(bookmark, index) in searchedList"
+        :bookmark="bookmark" :key="bookmark.shortForm"
+        :data-index="index"
+        :selected="searchedList.length !== 0 && bookmark.shortForm === searchedList[selectedIndex].shortForm" />
     </TransitionGroup>
   </div>
 </template>
@@ -83,22 +108,25 @@ export default {
 
 .bookmarks-container {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 8px;
   position: absolute;
   top: 240px;
   left: 240px;
+
+  max-width: 1280px;
 }
 
 .bookmarks-move,
 .bookmarks-enter-active,
 .bookmarks.leave-active {
-  transition: all 0.167s ease-in;
+  transition: all 0.33s ease-out;
 }
 
 .bookmarks-enter-from,
 .bookmarks-leave-to {
   opacity: 0;
-  /* translate: 16px; */
+  translate: 0 16px;
 }
 
 .bookmarks-leave-active {

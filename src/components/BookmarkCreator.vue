@@ -38,7 +38,7 @@ export default {
 <template>
     <div class="creator-container" @click="$emit('hideBookmarkCreator', false)">
         <Transition appear>
-            <div class="creator-inner-shape" @click="modalClick">
+            <div class="creator-inner-shape" @click.stop.prevent="">
                 <h1>Add Bookmark</h1>
                 <label>Name</label>
                 <input type="text" v-model="name">
