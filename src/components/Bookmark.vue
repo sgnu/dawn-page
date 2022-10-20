@@ -2,11 +2,16 @@
 export default {
     name: 'Bookmark',
     props: {
-        bookmarks: Array
+        bookmark: {
+            color: String,
+            name: String,
+            shortForm: String,
+            url: String
+        }
     },
     methods: {
-        openWindow(bookmark) {
-            window.alert(`This will open ${bookmark.name} at ${bookmark.url}`)
+        openWindow() {
+            window.alert(`This will open ${this.bookmark.name} at ${this.bookmark.url}`)
             // window.open(bookmark.url, '_self') // opens in current tab and not a new one
         }
     }
@@ -14,13 +19,11 @@ export default {
 </script>
 
 <template>
-    <div class="bookmarks-container">
-        <div class="bookmark" v-for="bookmark in bookmarks" v-on:click="openWindow(bookmark)">
+        <div class="bookmark" v-on:click="openWindow">
             <h1 class="short-form" :style="{ 'color': bookmark.color }">{{ bookmark.shortForm }}</h1>
             <p class="name">{{ bookmark.name }}</p>
             <p class="url">{{ bookmark.url }}</p>
         </div>
-    </div>
 </template>
 
 <style scoped>

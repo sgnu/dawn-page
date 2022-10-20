@@ -63,7 +63,7 @@ export default {
     <BookmarkCreator v-if="showCreator" @addBookmark="addBookmark" @hideBookmarkCreator="toggleBookmarkCreator" />
   </Transition>
   <input type="text" v-model="searchText" @keyup="searchBookmarks" @keyup.enter="submitSearch">
-  <Bookmark :bookmarks="searchedList" />
+  <Bookmark v-for="bookmark in bookmarkList" :bookmark="bookmark" />
 </template>
 
 <style scoped>
