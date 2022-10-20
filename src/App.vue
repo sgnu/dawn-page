@@ -24,9 +24,11 @@ export default {
   },
   methods: {
     searchBookmarks(event) {
-      if (event && event.keyCode === 8 || (event.keyCode >= 48 && event.keyCode <= 90)) {  // alphanumeric keycodes are 48 to 90 inclusive; 8 is backspace
-        this.selectedIndex = 0
-      } 
+      if (event) {
+        if (event.keyCode === 8 || (event.keyCode >= 48 && event.keyCode <= 90)) {  // alphanumeric keycodes are 48 to 90 inclusive; 8 is backspace
+          this.selectedIndex = 0
+        } 
+      }
       const arr = []
       this.bookmarkList.forEach(bookmark => {
         const searchCondition = bookmark.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
@@ -98,7 +100,7 @@ export default {
 <style scoped>
 .creator-enter-active,
 .creator-leave-active {
-  transition: opacity 0.167s ease-in
+  transition: opacity 0.167s ease-out
 }
 
 .creator-enter-from,
@@ -109,12 +111,14 @@ export default {
 .bookmarks-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  position: absolute;
-  top: 240px;
-  left: 240px;
+  gap: 8px 8px;
 
-  max-width: 1280px;
+  position: absolute;
+  padding: 32px;
+  top: 240px;
+  left: 0;
+
+  max-width: 960px;
 }
 
 .bookmarks-move,
