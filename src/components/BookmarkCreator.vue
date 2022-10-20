@@ -72,7 +72,7 @@ export default {
 }
 
 .creator-inner-shape {
-    background-color: #272732;
+    background-color: var(--ctp-mocha-base);
     border-radius: 8px;
     box-shadow: 2px 0px 12px 0px rgba(0, 0, 0, 0.33),
         4px 8px 24px 2px rgba(0, 0, 0, 0.167);

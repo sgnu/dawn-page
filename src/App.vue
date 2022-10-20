@@ -1,13 +1,15 @@
 <script>
 import Bookmark from './components/Bookmark.vue'
 import BookmarkCreator from './components/BookmarkCreator.vue'
+import Clock from './components/Clock.vue'
 import examples from './examples'
 
 export default {
   name: 'App',
   components: {
     Bookmark,
-    BookmarkCreator
+    BookmarkCreator,
+    Clock
   },
   data() {
     return {
@@ -76,6 +78,15 @@ export default {
 
     toggleBookmarkCreator(toggled) {
       this.showCreator = toggled
+    },
+
+    bookmarksBeforeLeave(element) {
+      const {marginLeft, marginTop, width, height} = window.getComputedStyle(element)
+
+      element.style.left = `${element.offsetLeft - parseFloat(marginLeft, 10)}px`
+      element.style.top = `${element.offsetTop - parseFloat(marginTop, 10)}px`
+      element.style.width = width
+      element.style.height = height
     }
   }
 }
@@ -96,12 +107,16 @@ export default {
     @keydown.tab.shift.exact.prevent="cycleBookmarks(false)">
   <div class="main-container">
     <div class="bookmarks-container">
-      <TransitionGroup name="bookmarks">
+      <TransitionGroup name="bookmarks"
+        @before-leave="bookmarksBeforeLeave">
         <Bookmark v-for="(bookmark, index) in searchedList"
           :bookmark="bookmark" :key="bookmark.shortForm"
           :data-index="index"
           :selected="searchedList.length !== 0 && bookmark.shortForm === searchedList[selectedIndex].shortForm" />
       </TransitionGroup>
+    </div>
+    <div class="widgets-container">
+      <Clock />
     </div>
   </div>
 </template>
@@ -119,26 +134,27 @@ export default {
 
 #search-bar {
   box-sizing: border-box;
-  border-bottom: 2px solid #bac2de;
-  color: #bac2de;
+  border-bottom: 2px solid var(--ctp-mocha-subtext0);
+  color: var(--ctp-mocha-subtext0);
 
   font-size: 24px;
 
   width: 240px;
-  height: 28px;
+  padding: 4px 2px;
 
   transition: border 0.167s ease-out,
     color 0.167s ease-out
 }
 
 #search-bar:focus {
-  border-color: #f5c2e7;
-  color: #f5c2e7;
+  border-color: var(--ctp-mocha-pink);
+  color: var(--ctp-mocha-pink);
 }
 
 .main-container {
   margin-top: 24px;
   display: grid;
+  gap: 16px;
   grid-template-columns: 2fr 1fr;
   justify-content: center;
   justify-items: start;
@@ -147,11 +163,19 @@ export default {
   max-width: 1280px;
 }
 
+.widgets-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
 .bookmarks-container {
   display: flex;
   flex-wrap: wrap;
   gap: 8px 8px;
   justify-content: flex-start;
+
+  width: 100%;
 }
 
 .bookmarks-move,
@@ -163,7 +187,7 @@ export default {
 .bookmarks-enter-from,
 .bookmarks-leave-to {
   opacity: 0;
-  translate: 0 16px;
+  transform: translateY(48px);
 }
 
 .bookmarks-leave-active {

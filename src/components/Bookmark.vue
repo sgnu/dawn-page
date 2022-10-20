@@ -28,13 +28,14 @@ export default {
 
 <style scoped>
 .bookmark {
-    background-color: #1e1e2e;
+    background-color: var(--ctp-mocha-base);
     border-radius: 4px;
-    box-shadow: 2px 2px 8px 4px rgba(0, 0, 0, .33);
+    box-shadow: 2px 2px 8px 4px rgba(0, 0, 0, .25);
 
     text-align: center;
-    width: 200px;
-    padding: 4px 20px;
+    width: 160px;
+    height: 64px;
+    padding: 8px 20px;
 
     cursor: pointer;
 
@@ -46,25 +47,26 @@ export default {
 }
 
 .bookmark:hover {
-    box-shadow: 2px 6px 8px 4px rgba(0, 0, 0, .33);
-    filter: brightness(1.1);
+    box-shadow: 2px 6px 8px 4px rgba(0, 0, 0, .20);
+    filter: brightness(1.15);
     transform: translateY(-4px);
 }
 
 .selected {
-    background-color: #313244;
-    box-shadow: 2px 18px 16px 2px rgba(0, 0, 0, .18);
-    /* translate: 0 -16px; */
+    background-color: var(--ctp-mocha-surface0);
 }
 
 h1 {
-    font-size: 48px;
-    line-height: 56px;
+    font-size: 40px;
+    line-height: 40px;
     margin: 0;
 }
 
 p {
-    font-size: 16px;
+    color: var(--ctp-mocha-subtext0);
+    font-size: 14px;
+    font-weight: 200;
     margin: 0;
+    margin-top: 4px;
 }
 </style>
