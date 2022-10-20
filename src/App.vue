@@ -1,12 +1,14 @@
 <script>
 import Bookmark from './components/Bookmark.vue'
+import BookmarkCreator from './components/BookmarkCreator.vue'
 import examples from './examples'
 
 export default {
   name: 'App',
   components: {
     Bookmark,
-  },
+    BookmarkCreator
+},
   data() {
     return {
       bookmarkList: Array,
@@ -39,13 +41,20 @@ export default {
         window.alert(`This will search for ${this.searchText}!`)
       }
     },
+
+    addBookmark(bookmark) {
+      this.bookmarkList.push(bookmark)
+      console.log(bookmark)
+      this.searchBookmarks()
+    }
   }
 }
 </script>
 
 <template>
   <h1>Hello World!</h1>
-  <input type="text" id="search" v-model="searchText" @keyup="searchBookmarks" @keyup.enter="submitSearch">
+  <BookmarkCreator @addBookmark="addBookmark" />
+  <input type="text" v-model="searchText" @keyup="searchBookmarks" @keyup.enter="submitSearch">
   <Bookmark :bookmarks="searchedList" />
 </template>
 
