@@ -26,7 +26,7 @@ export default {
             <h1 class="short-form" :style="{ 'color': bookmark.color }">{{ bookmark.shortForm }}</h1>
             <p class="name">{{ bookmark.name }}</p>
         </div>
-        <div class="right">
+        <div class="right" @click.stop.prevent="">
             <font-awesome-icon class="edit" icon="fa-solid fa-pen-to-square"
                 @click.stop.prevent="$emit('editBookmark', bookmark)" />
             <font-awesome-icon class="delete" icon="fa-solid fa-trash"
@@ -71,6 +71,7 @@ export default {
 .right {
     background-color: var(--ctp-mocha-mantle);
     overflow: hidden;
+    cursor: default;
 
     position: absolute;
     bottom: 0;
@@ -92,6 +93,7 @@ export default {
 .edit {
     color: var(--ctp-mocha-subtext0);
     opacity: 0;
+    cursor: pointer;
 
     width: 16px;
     height: 16px;
@@ -113,6 +115,8 @@ export default {
 .delete {
     color: var(--ctp-mocha-subtext0);
     opacity: 0;
+    cursor: pointer;
+
 
     width: 16px;
     height: 16px;
