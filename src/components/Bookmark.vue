@@ -69,7 +69,7 @@ export default {
 }
 
 .right {
-    background-color: var(--ctp-mocha-surface0);
+    background-color: var(--ctp-mocha-mantle);
     overflow: hidden;
 
     position: absolute;

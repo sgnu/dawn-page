@@ -68,11 +68,7 @@ export default {
 
     addBookmark(bookmark) {
       if (this.tempBookmark) {  // finished editing a pre-existing bookmark
-        this.bookmarkList = this.bookmarkList.filter(bookmark => {
-          return bookmark.name !== this.tempBookmark.name &&
-          bookmark.url !== this.tempBookmark.url &&
-          bookmark.shortForm !== this.tempBookmark.shortForm
-        })
+        this.deleteBookmark(this.tempBookmark)
 
         this.tempBookmark = undefined
       }
@@ -86,8 +82,15 @@ export default {
     editBookmark(bookmark) {
       this.tempBookmark = bookmark
       this.toggleBookmarkCreator(true)
+    },
 
-      console.log(bookmark)
+    deleteBookmark(bookmark) {
+      this.bookmarkList = this.bookmarkList.filter(listedBookmark => {
+        return bookmark.name !== listedBookmark.name &&
+          bookmark.url !== listedBookmark.url &&
+          bookmark.shortForm  !== listedBookmark.shortForm
+      })
+      this.searchBookmarks()
     },
 
     sortBookmarks() {
@@ -132,6 +135,7 @@ export default {
         @before-leave="bookmarksBeforeLeave">
         <Bookmark v-for="(bookmark, index) in searchedList"
           @editBookmark="editBookmark"
+          @deleteBookmark="deleteBookmark"
           :bookmark="bookmark" :key="bookmark.shortForm"
           :data-index="index"
           :selected="searchedList.length !== 0 && bookmark.shortForm === searchedList[selectedIndex].shortForm" />
