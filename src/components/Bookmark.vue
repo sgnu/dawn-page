@@ -10,7 +10,7 @@ export default {
         },
         selected: false,
     },
-    emits: ['editBookmark'],
+    emits: ['editBookmark', 'deleteBookmark'],
     methods: {
         openWindow() {
             window.alert(`This will open ${this.bookmark.name} at ${this.bookmark.url}`)
@@ -22,9 +22,16 @@ export default {
 
 <template>
     <div class="bookmark" v-on:click="openWindow" v-bind:class="{selected: selected}">
-        <h1 class="short-form" :style="{ 'color': bookmark.color }">{{ bookmark.shortForm }}</h1>
-        <p class="name">{{ bookmark.name }}</p>
-        <p class="edit" @click.stop.prevent="$emit('editBookmark', bookmark)">Edit</p>
+        <div class="container">
+            <h1 class="short-form" :style="{ 'color': bookmark.color }">{{ bookmark.shortForm }}</h1>
+            <p class="name">{{ bookmark.name }}</p>
+        </div>
+        <div class="right">
+            <font-awesome-icon class="edit" icon="fa-solid fa-pen-to-square"
+                @click.stop.prevent="$emit('editBookmark', bookmark)" />
+            <font-awesome-icon class="delete" icon="fa-solid fa-trash"
+                @click.stop.prevent="$emit('deleteBookmark', bookmark)" />
+        </div>
     </div>
 </template>
 
@@ -35,6 +42,9 @@ export default {
     box-shadow: 2px 2px 8px 4px rgba(0, 0, 0, .25);
 
     text-align: center;
+
+    overflow: hidden;
+
     width: 160px;
     height: 64px;
     padding: 8px 20px;
@@ -49,21 +59,44 @@ export default {
 }
 
 .bookmark:hover {
-    box-shadow: 2px 6px 8px 4px rgba(0, 0, 0, .20);
+    box-shadow: 2px 4px 8px 4px rgba(0, 0, 0, .20);
     filter: brightness(1.15);
-    transform: translateY(-4px);
+    transform: translateY(-2px);
 }
 
 .selected {
     background-color: var(--ctp-mocha-surface0);
 }
 
+.right {
+    background-color: var(--ctp-mocha-surface0);
+    overflow: hidden;
+
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 0;
+    height: 100%;
+
+    transition: width 0.167s ease-out;
+}
+
+.bookmark:hover .right {
+    width: 8px;
+}
+
+.right:hover {
+    width: 36px !important;
+}
+
 .edit {
     color: var(--ctp-mocha-subtext0);
     opacity: 0;
 
+    width: 16px;
+    height: 16px;
     position: absolute;
-    top: 2px;
+    bottom: 24px;
     right: 8px;
     transition: opacity 0.167s ease-out,
         color 0.167s ease-out
@@ -75,6 +108,27 @@ export default {
 
 .edit:hover {
     color: var(--ctp-mocha-blue)
+}
+
+.delete {
+    color: var(--ctp-mocha-subtext0);
+    opacity: 0;
+
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    bottom: 4px;
+    right: 8px;
+    transition: opacity 0.167s ease-out,
+        color 0.167s ease-out
+}
+
+.bookmark:hover .delete {
+    opacity: 1;
+}
+
+.delete:hover {
+    color: var(--ctp-mocha-red);
 }
 
 h1 {
