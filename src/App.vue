@@ -22,7 +22,15 @@ export default {
     }
   },
   created() {
-    this.bookmarkList = examples
+    const storedBookmarks =  localStorage.getItem('dawn-bookmarks')
+
+    if (storedBookmarks) {
+      this.bookmarkList = JSON.parse(storedBookmarks) // should do some verification that it's an array of bookmarks
+    } else {
+      this.bookmarkList = [] // create an empty array to use as bookmark list
+    }
+
+    // this.bookmarkList = examples
     this.sortBookmarks()
     this.searchedList = this.bookmarkList
   },
@@ -77,11 +85,7 @@ export default {
       this.sortBookmarks()
       this.toggleBookmarkCreator(false)
       this.searchBookmarks()
-    },
-
-    editBookmark(bookmark) {
-      this.tempBookmark = bookmark
-      this.toggleBookmarkCreator(true)
+      this.saveToLocalStorage()
     },
 
     deleteBookmark(bookmark) {
@@ -90,11 +94,21 @@ export default {
           bookmark.url !== listedBookmark.url &&
           bookmark.shortForm  !== listedBookmark.shortForm
       })
+      this.saveToLocalStorage()
       this.searchBookmarks()
+    },
+
+    editBookmark(bookmark) {
+      this.tempBookmark = bookmark
+      this.toggleBookmarkCreator(true)
     },
 
     sortBookmarks() {
       this.bookmarkList.sort((a, b) => { return (a.shortForm.toLowerCase() > b.shortForm.toLowerCase())})
+    },
+
+    saveToLocalStorage() {
+      localStorage.setItem('dawn-bookmarks', JSON.stringify(this.bookmarkList))
     },
 
     toggleBookmarkCreator(toggled) {
