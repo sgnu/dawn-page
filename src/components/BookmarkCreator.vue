@@ -44,10 +44,6 @@ export default {
             this.url = ''
         },
 
-        getBookmark() {
-            return this.bookmark
-        },
-
         onInput(element) {
             if (element.target.value) {
                 element.target.previousSibling.classList.add('visible')
@@ -65,7 +61,7 @@ export default {
             <div class="creator-inner-shape" @click.stop.prevent="">
                 <!-- <h1>Add Bookmark</h1> -->
                 <label :class="(name) ? 'displayed' : ''">Name</label>
-                <input type="text" v-model="name" placeholder="Name" pattern="\S+.*" @keyup="onInput">
+                <input type="text" v-model="name" placeholder="Name" @keyup="onInput">
 
                 <label :class="(shortForm) ? 'displayed' : ''">ID</label>
                 <input type="text" v-model="shortForm" placeholder="ID" @keyup="onInput">
@@ -114,7 +110,7 @@ export default {
     flex-direction: column;
     align-items: center;
 
-    padding: 8px 16px;
+    padding: 16px;
 
     z-index: 11;
 }
@@ -126,6 +122,7 @@ export default {
 label {
     color: var(--ctp-mocha-text);
     text-align: left;
+    font-size: 12px;
     width: 100%;
     opacity: 0;
     translate: 0 16px;
@@ -142,7 +139,10 @@ input[type="text"] {
     color: var(--ctp-mocha-subtext0);
     border-bottom: 2px solid var(--ctp-mocha-subtext0);
 
+    font-size: 14px;
+
     width: 100%;
+    height: 40px;
     padding: 4px 8px;
     margin-bottom: 4px;
 }
@@ -163,6 +163,7 @@ input[type="button"] {
     padding: 4px 8px;
 
     transition: all 0.167s ease-out;
+    z-index: 12;
 }
 
 input[type="button"]:hover {
