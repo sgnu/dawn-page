@@ -2,13 +2,15 @@
 import Bookmark from './components/Bookmark.vue'
 import BookmarkCreator from './components/BookmarkCreator.vue'
 import Clock from './components/Clock.vue'
+import Weather from './components/Weather.vue'
 
 export default {
   name: 'App',
   components: {
     Bookmark,
     BookmarkCreator,
-    Clock
+    Clock,
+    Weather
   },
   data() {
     return {
@@ -190,6 +192,7 @@ export default {
     </div>
     <div class="widgets-container">
       <Clock />
+      <Weather />
     </div>
   </div>
 </template>
@@ -239,6 +242,7 @@ export default {
 .widgets-container {
   display: flex;
   flex-direction: column;
+  gap: 16px;
   width: 100%;
 }
 
