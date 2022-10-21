@@ -58,8 +58,20 @@ export default {
       if (this.searchedList[this.selectedIndex]) {
         window.alert(`This will open ${this.searchedList[this.selectedIndex].name} at ${this.searchedList[this.selectedIndex].url}`)
       } else {
+        if (this.searchText.substring(0, 2) === 'd ') {
+          window.alert(`This will search on Duck Duck Go for ${this.searchText.substring(2)}!`)
+        } else if (this.searchText.substring(0, 2) === 'g ') {
+          window.alert(`This will search on Google for ${this.searchText.substring(2)}!`)
+        } else if (this.searchText.substring(0, 2) === 'y ') {
+          window.alert(`This will search on Youtube for ${this.searchText.substring(2)}!`)
+        }
         window.alert(`This will search for ${this.searchText}!`)
       }
+    },
+
+    clearSearch() {
+      this.searchText = ''
+      this.searchedList = this.bookmarkList
     },
 
     cycleBookmarks(goForward) {
@@ -162,6 +174,7 @@ export default {
     v-model="searchText"
     @keyup="searchBookmarks"
     @keyup.enter="submitSearch"
+    @keyup.esc="clearSearch"
     @keydown.tab.exact.prevent="cycleBookmarks(true)"
     @keydown.tab.shift.exact.prevent="cycleBookmarks(false)">
   <div class="main-container">
