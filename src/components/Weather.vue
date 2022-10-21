@@ -40,7 +40,7 @@ h1 {
 }
 
 h2 {
-    color: var(--ctp-mocha-text);
+    color: var(--ctp-mocha-subtext1);
     font-size: 18px;
     font-weight: 400;
 }
