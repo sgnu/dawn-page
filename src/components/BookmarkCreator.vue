@@ -12,7 +12,8 @@ export default {
             name: String,
             shortForm: String,
             url: String
-        }
+        },
+        buttonText: String
     },
     emits: ['addBookmark', 'hideBookmarkCreator'],
     data() {
@@ -63,7 +64,7 @@ export default {
                 <input type="text" v-model="url">
                 <ColorPicker :color="color" default-format="hex" :visible-formats="['hex', 'rgb']" alpha-channel="hide"
                     @color-change="updateColor" />
-                <input type="button" value="Add"
+                <input type="button" :value="buttonText"
                     @click="$emit('addBookmark', { color: this.color, name: this.name, shortForm: this.shortForm, url: this.url })">
             </div>
         </Transition>

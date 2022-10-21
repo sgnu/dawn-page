@@ -4,11 +4,6 @@ import BookmarkCreator from './components/BookmarkCreator.vue'
 import Clock from './components/Clock.vue'
 import examples from './examples'
 
-function verifyUrl(url) {
-  const urlPattern = new RegExp('(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?');
-  return !!urlPattern.test(url)
-}
-
 export default {
   name: 'App',
   components: {
@@ -23,7 +18,8 @@ export default {
       searchText: '',
       showCreator: false,
       selectedIndex: 0,
-      tempBookmark: undefined
+      tempBookmark: undefined,
+      creatorButtonText: 'Add'
     }
   },
   created() {
@@ -86,16 +82,14 @@ export default {
         this.tempBookmark = undefined
       }
 
-
-
-      if (verifyUrl(bookmark.url)) {
+      if (this.verifyUrl(bookmark.url)) {
         this.bookmarkList.push(bookmark)
         this.sortBookmarks()
         this.toggleBookmarkCreator(false)
         this.searchBookmarks()
         this.saveToLocalStorage()
       }  else {
-        window.alert('Invalid url!')
+        window.alert(`Invalid URL! ${bookmark.url}`)
       }
     },
 
@@ -111,7 +105,7 @@ export default {
 
     editBookmark(bookmark) {
       this.tempBookmark = bookmark
-      this.toggleBookmarkCreator(true)
+      this.toggleBookmarkCreator(true, true)
     },
 
     sortBookmarks() {
@@ -122,8 +116,24 @@ export default {
       localStorage.setItem('dawn-bookmarks', JSON.stringify(this.bookmarkList))
     },
 
-    toggleBookmarkCreator(toggled) {
+    toggleBookmarkCreator(toggled, update) {
       this.showCreator = toggled
+      if (update) {
+        this.creatorButtonText = 'Update'
+      } else {
+        this.creatorButtonText = 'Add'
+      }
+    },
+
+    
+    verifyUrl(url) {
+      const urlPattern = new RegExp('^(https?:\\/\\/)?'+ // validate protocol
+	    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // validate domain name
+	    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // validate OR ip (v4) address
+	    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // validate port and path
+	    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // validate query string
+	    '(\\#[-a-z\\d_]*)?$','i'); // validate fragment locatornew RegExp('(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?');
+      return !!urlPattern.test(url)
     },
 
     bookmarksBeforeLeave(element) {
@@ -140,10 +150,11 @@ export default {
 
 <template>
   <h1>Hello World!</h1>
-  <input type="button" value="Show Creator" @click="toggleBookmarkCreator(true)">
+  <input type="button" value="Show Creator" @click="toggleBookmarkCreator(true, false)">
   <Transition name="creator">
     <BookmarkCreator v-if="showCreator"
       :bookmark="tempBookmark"
+      :buttonText="creatorButtonText"
       @addBookmark="addBookmark"
       @hideBookmarkCreator="toggleBookmarkCreator" />
   </Transition>
