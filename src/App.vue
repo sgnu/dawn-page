@@ -4,6 +4,11 @@ import BookmarkCreator from './components/BookmarkCreator.vue'
 import Clock from './components/Clock.vue'
 import examples from './examples'
 
+function verifyUrl(url) {
+  const urlPattern = new RegExp('(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?');
+  return !!urlPattern.test(url)
+}
+
 export default {
   name: 'App',
   components: {
@@ -81,11 +86,17 @@ export default {
         this.tempBookmark = undefined
       }
 
-      this.bookmarkList.push(bookmark)
-      this.sortBookmarks()
-      this.toggleBookmarkCreator(false)
-      this.searchBookmarks()
-      this.saveToLocalStorage()
+
+
+      if (verifyUrl(bookmark.url)) {
+        this.bookmarkList.push(bookmark)
+        this.sortBookmarks()
+        this.toggleBookmarkCreator(false)
+        this.searchBookmarks()
+        this.saveToLocalStorage()
+      }  else {
+        window.alert('Invalid url!')
+      }
     },
 
     deleteBookmark(bookmark) {
