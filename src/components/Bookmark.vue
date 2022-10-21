@@ -96,7 +96,7 @@ export default {
     width: 16px;
     height: 16px;
     position: absolute;
-    bottom: 24px;
+    bottom: 28px;
     right: 8px;
     transition: opacity 0.167s ease-out,
         color 0.167s ease-out
