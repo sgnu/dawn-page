@@ -124,7 +124,6 @@ export default {
         this.creatorButtonText = 'Add'
       }
     },
-
     
     verifyUrl(url) {
       const urlPattern = new RegExp('^(https?:\\/\\/)?'+ // validate protocol
