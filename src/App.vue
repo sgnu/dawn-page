@@ -2,7 +2,6 @@
 import Bookmark from './components/Bookmark.vue'
 import BookmarkCreator from './components/BookmarkCreator.vue'
 import Clock from './components/Clock.vue'
-import examples from './examples'
 
 export default {
   name: 'App',
