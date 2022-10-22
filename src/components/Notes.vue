@@ -5,7 +5,7 @@ export default {
     name: 'Notes',
     data() {
         return {
-            notes: '# this is a header',
+            notes: String,
             editing: false
         }
     },
@@ -17,12 +17,21 @@ export default {
     methods: {
         toggleEditing(truthiness) {
             this.editing = truthiness
+            localStorage.setItem('dawn-notes', this.notes)
             if (truthiness) {
                 this.$nextTick(() => {
                     const textRef = this.$refs.text
                     textRef.focus()
                 })
             }
+        }
+    },
+    created() {
+        const storedNotes = localStorage.getItem('dawn-notes')
+        if (storedNotes) {
+            this.notes = storedNotes
+        } else {
+            this.notes = ''
         }
     }
 }
