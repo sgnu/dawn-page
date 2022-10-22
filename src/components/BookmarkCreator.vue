@@ -30,6 +30,8 @@ export default {
             this.name = this.bookmark.name
             this.shortForm = this.bookmark.shortForm
             this.url = this.bookmark.url
+
+            this.displayLabels()
         }
     },
     methods: {
@@ -42,6 +44,15 @@ export default {
             this.name = ''
             this.shortForm = ''
             this.url = ''
+        },
+
+        displayLabels() {
+            this.$nextTick(() => {
+                const labels = this.$refs.parent.querySelectorAll('label')
+                labels.forEach(label => {
+                    label.classList.add('visible')
+                })
+            })
         },
 
         onInput(element) {
@@ -58,15 +69,15 @@ export default {
 <template>
     <div class="creator-container" @click="$emit('hideBookmarkCreator', false)">
         <Transition appear>
-            <div class="creator-inner-shape" @click.stop.prevent="">
+            <div id="creator" ref="parent" class="creator-inner-shape" @click.stop.prevent="">
                 <!-- <h1>Add Bookmark</h1> -->
-                <label :class="(name) ? 'displayed' : ''">Name</label>
+                <label>Name</label>
                 <input type="text" v-model="name" placeholder="Name" @keyup="onInput">
 
-                <label :class="(shortForm) ? 'displayed' : ''">ID</label>
+                <label>ID</label>
                 <input type="text" v-model="shortForm" placeholder="ID" @keyup="onInput">
 
-                <label :class="(url) ? 'displayed' : ''">URL</label>
+                <label>URL</label>
                 <input type="text" v-model="url" placeholder="URL" @keyup="onInput">
 
                 <ColorPicker :color="color" default-format="hex" :visible-formats="['hex', 'rgb']" alpha-channel="hide"
@@ -123,7 +134,10 @@ label {
     color: var(--ctp-mocha-text);
     text-align: left;
     font-size: 12px;
+
     width: 100%;
+    margin-left: 16px;
+
     opacity: 0;
     translate: 0 16px;
     transition: translate 0.167s ease-out,
@@ -144,7 +158,7 @@ input[type="text"] {
     width: 100%;
     height: 40px;
     padding: 4px 8px;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
 }
 
 ::placeholder {
