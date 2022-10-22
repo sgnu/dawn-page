@@ -75,7 +75,8 @@ const settings = {
   weather: {
     enabled: true,
     apiKey: '',
-    locationData: ''
+    locationData: '',
+    units: 'imperial'
   }
 }
 

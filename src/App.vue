@@ -42,9 +42,7 @@ export default {
       this.bookmarkList = [] // create an empty array to use as bookmark list
     }
 
-    if (!this.settings) {
-      this.settings = settings
-    }
+    this.loadSettings()
 
     if (this.settings.weather.enabled) {
       this.weatherAPICall();
@@ -164,10 +162,43 @@ export default {
 
     toggleSettings(toggled) {
       this.showSettings = toggled
+      this.saveSettings()
     },
 
-    updateSettings(newSettings) {
-      this.settings = newSettings
+    loadSettings() {
+      // Settings should follow:
+      // settings = {
+      //   category: {
+      //     property1,
+      //     property2
+      //   }
+      // }
+
+      const string = localStorage.getItem('dawn-settings')
+      if (string) {
+        const storedSettings = JSON.parse(string)
+        Object.keys(settings).forEach(category => {
+          if (storedSettings.hasOwnProperty(category)) {  // settings category exists
+            Object.keys(settings[category]).forEach(property => {
+              if (!storedSettings[category].hasOwnProperty(property)) { // settings property is missing
+                storedSettings[category][property] = settings[category][property]
+              }
+            })
+          } else {  // settings category is missing
+            storedSettings[category] = settings[category]
+          }
+        })
+
+        this.settings = storedSettings
+        this.saveSettings()
+      } else {
+        this.settings = settings
+        this.saveSettings()
+      }
+    },
+
+    saveSettings() {
+      localStorage.setItem('dawn-settings', JSON.stringify(this.settings))
     },
 
     saveToLocalStorage() {
