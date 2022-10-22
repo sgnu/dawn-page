@@ -80,17 +80,21 @@ export default {
     },
 
     submitSearch() {
+      const target = '_blank' // open in new tab while testing; use _self to open in urrent
       if (this.searchedList[this.selectedIndex]) {
-        window.alert(`This will open ${this.searchedList[this.selectedIndex].name} at ${this.searchedList[this.selectedIndex].url}`)
+        window.open(this.searchedList[this.selectedIndex].url, target)
       } else {
         if (this.searchText.substring(0, 2) === 'd ') {
-          window.alert(`This will search on Duck Duck Go for ${this.searchText.substring(2)}!`)
+          window.open(`https://duckduckgo.com/?q=${encodeURIComponent(this.searchText.substring(2))}`, target)
         } else if (this.searchText.substring(0, 2) === 'g ') {
-          window.alert(`This will search on Google for ${this.searchText.substring(2)}!`)
+          window.open(`https://google.com/search?q=${encodeURIComponent(this.searchText.substring(2))}`, target)
         } else if (this.searchText.substring(0, 2) === 'y ') {
-          window.alert(`This will search on Youtube for ${this.searchText.substring(2)}!`)
+          window.open(`https://youtube.com/results?search_query=${encodeURIComponent(this.searchText.substring(2))}`, target)
+        } else if (this.verifyUrl(this.searchText)) {
+          window.open(this.appendHttp(this.searchText), target)
+        } else {
+          window.open(`https://duckduckgo.com/?q=${encodeURIComponent(this.searchText)}`, target)
         }
-        window.alert(`This will search for ${this.searchText}!`)
       }
     },
 
@@ -181,6 +185,14 @@ export default {
         '(\\?[;&a-z\\d%_.~+=-]*)?' + // validate query string
         '(\\#[-a-z\\d_]*)?$', 'i'); // validate fragment locatornew RegExp('(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?');
       return !!urlPattern.test(url)
+    },
+
+    appendHttp(url) {
+      if (!url.includes(':')) {
+        return `https://${url}`
+      } else {
+        return url
+      }
     },
 
     bookmarksBeforeLeave(element) {
