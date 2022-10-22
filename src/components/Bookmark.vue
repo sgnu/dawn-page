@@ -41,11 +41,14 @@ export default {
     border-radius: 4px;
     box-shadow: 2px 2px 8px 4px rgba(0, 0, 0, .25);
 
+    flex-grow: 1;
+
     text-align: center;
 
     overflow: hidden;
 
-    width: 160px;
+    min-width: 128px;
+    max-width: 200px;
     height: 64px;
     padding: 8px 20px;
 

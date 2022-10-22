@@ -2,6 +2,7 @@
 import Bookmark from './components/Bookmark.vue'
 import BookmarkCreator from './components/BookmarkCreator.vue'
 import Clock from './components/Clock.vue'
+import Notes from './components/Notes.vue'
 import Weather from './components/Weather.vue'
 
 export default {
@@ -10,6 +11,7 @@ export default {
     Bookmark,
     BookmarkCreator,
     Clock,
+    Notes,
     Weather
   },
   data() {
@@ -192,6 +194,7 @@ export default {
     </div>
     <div class="widgets-container">
       <Clock />
+      <Notes />
       <Weather />
     </div>
   </div>
@@ -232,8 +235,9 @@ export default {
   display: grid;
   gap: 16px;
   grid-template-columns: 2fr 1fr;
+  grid-template-rows: auto;
   justify-content: center;
-  justify-items: start;
+  /* justify-items: start; */
 
   width: 80vw;
   max-width: 1280px;
@@ -249,10 +253,13 @@ export default {
 .bookmarks-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 8px;
+  gap: 8px;
   justify-content: flex-start;
+  align-items: flex-start;
+  align-content: flex-start;
 
   width: 100%;
+  height: auto;
 }
 
 .bookmarks-move,
