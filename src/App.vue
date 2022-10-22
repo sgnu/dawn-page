@@ -38,6 +38,12 @@ export default {
     this.sortBookmarks()
     this.searchedList = this.bookmarkList
   },
+  mounted() {
+    this.$nextTick(() => {
+      const searchRef = this.$refs.searchBar
+      searchRef.focus()
+    })
+  },
   methods: {
     searchBookmarks(event) {
       if (event) {
@@ -176,6 +182,7 @@ export default {
       @hideBookmarkCreator="toggleBookmarkCreator" />
   </Transition>
   <input id="search-bar"
+    ref="searchBar"
     type="text"
     v-model="searchText"
     @keyup="searchBookmarks"
