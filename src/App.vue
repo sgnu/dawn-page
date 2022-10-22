@@ -44,9 +44,8 @@ export default {
 
     this.loadSettings()
 
-    if (this.settings.weather.enabled) {
-      this.weatherAPICall();
-    }
+    this.weatherAPICall()
+    this.weatherRefresh = setInterval(this.weatherAPICall, 15000) // refresh every 15 seconds
 
     // this.bookmarkList = examples
     this.sortBookmarks()
@@ -252,21 +251,23 @@ export default {
     },
 
     async weatherAPICall() {
-      if (this.settings.weather.apiKey && this.settings.weather.locationData) {
-        const url = `https://api.openweathermap.org/data/2.5/weather?q=${this.settings.weather.locationData}&appid=${this.settings.weather.apiKey}&units=imperial`
+      if (this.settings.weather.enabled && this.settings.weather.apiKey && this.settings.weather.locationData) {
+        const units = this.settings.weather.useImperial ? 'imperial' : 'metric'
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${this.settings.weather.locationData}&appid=${this.settings.weather.apiKey}&units=${units}`
         const response = await fetch(url)
         response.json().then(data => {
           this.weatherData = data
-          this.weatherRefresh = setTimeout(this.weatherAPICall, 60000 * 5) // success; refresh in 5 minutes
+          this.weatherData.useImperial = this.settings.weather.useImperial
         }).catch(e => {
           this.weatherData = undefined
-          this.weatherRefresh = setTimeout(this.weatherAPICall, 5000) // failed; retry in 5 seconds
         })
       } else {
         this.weatherData = undefined
-        this.weatherRefresh = setTimeout(this.weatherAPICall, 5000) // failed; retry in 5 seconds
       }
     }
+  },
+  beforeUnmount() {
+    clearInterval(this.weatherRefresh)
   }
 }
 </script>
@@ -301,7 +302,7 @@ export default {
       <TransitionGroup name="widgets" @before-leave="widgetsBeforeLeave">
         <Clock key="clock" v-if="settings.clock.enabled" :prop-settings="settings" />
         <Notes key="notes" v-if="settings.notes.enabled" />
-        <Weather key="weather" v-if="settings.weather.enabled && this.weatherData" :weather-data="weatherData" />
+        <Weather key="weather" v-if="settings.weather.enabled && weatherData" :weather="weatherData" />
       </TransitionGroup>
     </div>
   </div>

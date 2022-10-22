@@ -66,7 +66,6 @@ export default {
                         <span class="slider"></span>
                     </label>
                 </div>
-
                 <div class="setting">
                     <label class="label-text">API Key <a href="https://openweathermap.org/" target="_blank">(?)</a></label>
                     <input type="password" v-model="settings.weather.apiKey"
@@ -77,6 +76,13 @@ export default {
                     <label class="label-text">Location <a href="https://openweathermap.org/current#name" target="_blank">(?)</a></label>
                     <input type="text"
                     v-model="settings.weather.locationData" />
+                </div>
+                <div class="setting">
+                    <span class="setting-label">Use imperial</span>
+                    <label class="switch">
+                        <input type="checkbox" v-model="settings.weather.useImperial" />
+                        <span class="slider"></span>
+                    </label>
                 </div>
 
             </div>
@@ -122,6 +128,7 @@ export default {
 
 .setting {
     width: 100%;
+    margin-bottom: 4px;
 }
 
 input[type="password"],

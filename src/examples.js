@@ -76,7 +76,7 @@ const settings = {
     enabled: true,
     apiKey: '',
     locationData: '',
-    units: 'imperial'
+    useImperial: true
   }
 }
 

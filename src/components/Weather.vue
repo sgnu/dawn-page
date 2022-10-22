@@ -2,11 +2,11 @@
 export default {
     name: 'Weather',
     props: {
-        weatherData: Object
+        weather: Object
     },
-    data() {
-        return {
-            weather: this.weatherData,
+    computed: {
+        getUnit() {
+            return this.weather.useImperial ? '°F' : '°C'
         }
     }
 }
@@ -14,9 +14,9 @@ export default {
 
 <template>
     <div>
-        <h1>{{Math.round(weather.main.temp)}}&deg;F</h1>
+        <h1>{{Math.round(weather.main.temp)}}{{getUnit}}</h1>
         <h2>{{weather.weather[0].main}} in {{weather.name}}</h2>
-        <p>{{Math.round(weather.wind.speed)}} mph winds and {{Math.round(weather.main.temp_min)}}&deg;F to {{Math.round(weather.main.temp_max)}}&deg;F</p>
+        <p>{{Math.round(weather.wind.speed)}} mph winds and {{Math.round(weather.main.temp_min)}}{{getUnit}} to {{Math.round(weather.main.temp_max)}}{{getUnit}}</p>
     </div>
 </template>
 
