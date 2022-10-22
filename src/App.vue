@@ -138,6 +138,9 @@ export default {
       } else {
         this.creatorButtonText = 'Add'
       }
+      if (!toggled) {
+        this.tempBookmark = undefined
+      }
     },
     
     verifyUrl(url) {
