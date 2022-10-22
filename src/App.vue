@@ -172,8 +172,9 @@ export default {
 </script>
 
 <template>
-  <h1>Hello World!</h1>
-  <input type="button" value="Show Creator" @click="toggleBookmarkCreator(true, false)">
+  <div class="nav-container add-container">
+    <font-awesome-icon class="add-button" icon="fa-solid fa-plus" @click="toggleBookmarkCreator(true, false)" />
+  </div>
   <Transition name="creator">
     <BookmarkCreator v-if="showCreator"
       :bookmark="tempBookmark"
@@ -219,6 +220,32 @@ export default {
 .creator-enter-from,
 .creator-leave-to {
   opacity: 0;
+}
+
+.nav-container {
+  cursor: pointer;
+  position: absolute;
+  height: 32px;
+  width: 32px;
+  transition: all 0.167s ease-out;
+}
+
+.add-container {
+  top: 16px;
+  right: 16px;
+}
+
+.add-button {
+  color: var(--ctp-mocha-subtext0);
+
+  height: 32px;
+  width: 32px;
+
+  transition: color 0.167s ease-out;
+}
+
+.add-button:hover {
+  color: var(--ctp-mocha-blue);
 }
 
 #search-bar {
@@ -275,7 +302,7 @@ export default {
 .bookmarks-move,
 .bookmarks-enter-active,
 .bookmarks.leave-active {
-  transition: all 0.33s ease-out;
+  transition: all 0.167s ease-out;
 }
 
 .bookmarks-enter-from,
