@@ -13,8 +13,7 @@ export default {
     emits: ['editBookmark', 'deleteBookmark'],
     methods: {
         openWindow() {
-            window.alert(`This will open ${this.bookmark.name} at ${this.bookmark.url}`)
-            // window.open(bookmark.url, '_self') // opens in current tab and not a new one
+            window.open(bookmark.url, '_self') // opens in current tab and not a new one
         }
     }
 }
