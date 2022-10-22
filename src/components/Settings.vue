@@ -134,9 +134,19 @@ export default {
 input[type="password"],
 input[type="text"] {
     float: right;
-    border-bottom: 2px solid var(--ctp-mocha-text);
+    border-bottom: 2px solid var(--ctp-mocha-subtext0);
+
+    color: var(--ctp-mocha-subtext0);
 
     margin-bottom: 4px;
+
+    transition: all 0.167s ease-out;
+}
+
+input[type="password"]:focus,
+input[type="text"]:focus {
+    border-color: var(--ctp-mocha-blue);
+    color: var(--ctp-mocha-blue);
 }
 
 h1 {
