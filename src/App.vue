@@ -124,6 +124,7 @@ export default {
       }
 
       if (this.verifyUrl(bookmark.url)) {
+        bookmark.url = this.appendHttp(bookmark.url)
         this.bookmarkList.push(bookmark)
         this.sortBookmarks()
         this.toggleBookmarkCreator(false)
@@ -150,7 +151,15 @@ export default {
     },
 
     sortBookmarks() {
-      this.bookmarkList.sort((a, b) => { return (a.shortForm.toLowerCase() > b.shortForm.toLowerCase()) })
+      this.bookmarkList.sort((a, b) => {
+        if (a.shortForm.toLowerCase() > b.shortForm.toLowerCase()) {  // a is greater than b
+          return 1;
+        } else if (a.shortForm.toLowerCase() < b.shortForm.toLowerCase()) { // a is less than b
+          return -1;
+        } else {  // a is equal to b
+          return 0
+        }
+      })
     },
 
     toggleSettings(toggled) {
@@ -247,7 +256,7 @@ export default {
 
   <input id="search-bar" ref="searchBar" type="text" v-model="searchText" @keyup="searchBookmarks"
     @keyup.enter="submitSearch" @keyup.esc="clearSearch" @keydown.tab.exact.prevent="cycleBookmarks(true)"
-    @keydown.tab.shift.exact.prevent="cycleBookmarks(false)">
+    @keydown.tab.shift.exact.prevent="cycleBookmarks(false)" spellcheck="false">
 
   <div class="main-container">
     <div class="bookmarks-container">
