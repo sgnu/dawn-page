@@ -63,4 +63,17 @@ const weatherData = {
   "cod": 200
 }
 
-export { bookmarks, weatherData }
+const settings = {
+  clock: {
+    enabled: true,
+    twentyFourHours: true,
+    seconds: true
+  },
+  weather: {
+    enabled: true,
+    apiKey: '',
+    locationData: ''
+  }
+}
+
+export { bookmarks, weatherData, settings }

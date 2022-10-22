@@ -3,7 +3,10 @@ import Bookmark from './components/Bookmark.vue'
 import BookmarkCreator from './components/BookmarkCreator.vue'
 import Clock from './components/Clock.vue'
 import Notes from './components/Notes.vue'
+import Settings from './components/Settings.vue'
 import Weather from './components/Weather.vue'
+
+import { settings } from './examples'
 
 export default {
   name: 'App',
@@ -12,6 +15,7 @@ export default {
     BookmarkCreator,
     Clock,
     Notes,
+    Settings,
     Weather
   },
   data() {
@@ -20,18 +24,24 @@ export default {
       searchedList: Array,
       searchText: '',
       showCreator: false,
+      showSettings: false,
       selectedIndex: 0,
       tempBookmark: undefined,
-      creatorButtonText: 'Add'
+      creatorButtonText: 'Add',
+      settings: undefined
     }
   },
   created() {
-    const storedBookmarks =  localStorage.getItem('dawn-bookmarks')
+    const storedBookmarks = localStorage.getItem('dawn-bookmarks')
 
     if (storedBookmarks) {
       this.bookmarkList = JSON.parse(storedBookmarks) // should do some verification that it's an array of bookmarks
     } else {
       this.bookmarkList = [] // create an empty array to use as bookmark list
+    }
+
+    if (!this.settings) {
+      this.settings = settings
     }
 
     // this.bookmarkList = examples
@@ -133,6 +143,14 @@ export default {
       this.bookmarkList.sort((a, b) => { return (a.shortForm.toLowerCase() > b.shortForm.toLowerCase())})
     },
 
+    toggleSettings(toggled) {
+      this.showSettings = toggled
+    },
+
+    updateSettings(newSettings) {
+      this.settings = newSettings
+    },
+
     saveToLocalStorage() {
       localStorage.setItem('dawn-bookmarks', JSON.stringify(this.bookmarkList))
     },
@@ -172,9 +190,9 @@ export default {
 </script>
 
 <template>
-  <div class="nav-container add-container">
-    <font-awesome-icon class="add-button" icon="fa-solid fa-plus" @click="toggleBookmarkCreator(true, false)" />
-  </div>
+  <font-awesome-icon class="nav-button add-button" icon="fa-solid fa-plus" @click="toggleBookmarkCreator(true, false)" />
+  <font-awesome-icon class="nav-button settings-button" icon="fa-solid fa-gear" @click="toggleSettings(true)" />
+
   <Transition name="creator">
     <BookmarkCreator v-if="showCreator"
       :bookmark="tempBookmark"
@@ -182,6 +200,13 @@ export default {
       @addBookmark="addBookmark"
       @hideBookmarkCreator="toggleBookmarkCreator" />
   </Transition>
+
+  <Transition name="settings">
+    <Settings v-if="showSettings"
+    :prop-settings="settings"
+    @hideSettings="toggleSettings" />
+  </Transition>
+
   <input id="search-bar"
     ref="searchBar"
     type="text"
@@ -191,6 +216,7 @@ export default {
     @keyup.esc="clearSearch"
     @keydown.tab.exact.prevent="cycleBookmarks(true)"
     @keydown.tab.shift.exact.prevent="cycleBookmarks(false)">
+
   <div class="main-container">
     <div class="bookmarks-container">
       <TransitionGroup name="bookmarks"
@@ -204,39 +230,35 @@ export default {
       </TransitionGroup>
     </div>
     <div class="widgets-container">
-      <Clock />
-      <Notes />
-      <Weather />
+      <TransitionGroup name="widgets">
+        <Clock key="clock" v-if="settings.clock.enabled" />
+        <Notes key="notes" />
+        <Weather key="weather" />
+      </TransitionGroup>
     </div>
   </div>
 </template>
 
 <style scoped>
+.settings-enter-active,
+.settings-leave-active,
 .creator-enter-active,
 .creator-leave-active {
   transition: opacity 0.167s ease-out
 }
 
+.settings-enter-from,
+.settings-leave-to,
 .creator-enter-from,
 .creator-leave-to {
   opacity: 0;
 }
 
-.nav-container {
-  cursor: pointer;
-  position: absolute;
-  height: 32px;
-  width: 32px;
-  transition: all 0.167s ease-out;
-}
-
-.add-container {
-  top: 16px;
-  right: 16px;
-}
-
-.add-button {
+.nav-button {
   color: var(--ctp-mocha-subtext0);
+  cursor: pointer;
+
+  position: absolute;
 
   height: 32px;
   width: 32px;
@@ -244,8 +266,18 @@ export default {
   transition: color 0.167s ease-out;
 }
 
-.add-button:hover {
+.nav-button:hover {
   color: var(--ctp-mocha-blue);
+}
+
+.add-button {
+  top: 16px;
+  right: 16px;
+}
+
+.settings-button {
+  top: 64px;
+  right: 16px;
 }
 
 #search-bar {
@@ -299,10 +331,19 @@ export default {
   height: auto;
 }
 
+.widgets-move,
+.widgets-enter-active,
+.widgets.leave-active,
 .bookmarks-move,
 .bookmarks-enter-active,
 .bookmarks.leave-active {
   transition: all 0.167s ease-out;
+}
+
+.widgets-enter-from,
+.widgets-leave-to {
+  opacity: 0;
+  transform: translateX(24px);
 }
 
 .bookmarks-enter-from,
@@ -311,6 +352,7 @@ export default {
   transform: translateY(48px);
 }
 
+.widgets-leave-active,
 .bookmarks-leave-active {
   position: absolute;
 }
