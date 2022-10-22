@@ -184,6 +184,13 @@ export default {
       element.style.top = `${element.offsetTop - parseFloat(marginTop, 10)}px`
       element.style.width = width
       element.style.height = height
+    },
+
+    widgetsBeforeLeave(element) {
+      const {marginLeft, marginTop, width, height} = window.getComputedStyle(element)
+
+      element.style.width = width
+      element.style.height = height
     }
   }
 }
@@ -230,10 +237,11 @@ export default {
       </TransitionGroup>
     </div>
     <div class="widgets-container">
-      <TransitionGroup name="widgets">
-        <Clock key="clock" v-if="settings.clock.enabled" />
-        <Notes key="notes" />
-        <Weather key="weather" />
+      <TransitionGroup name="widgets"
+      @before-leave="widgetsBeforeLeave" >
+        <Clock key="clock" v-if="settings.clock.enabled" :prop-settings="settings"/>
+        <Notes key="notes" v-if="settings.notes.enabled" />
+        <Weather key="weather" v-if="settings.weather.enabled" />
       </TransitionGroup>
     </div>
   </div>
@@ -315,8 +323,9 @@ export default {
 .widgets-container {
   display: flex;
   flex-direction: column;
+  align-items: stretch;
   gap: 16px;
-  width: 100%;
+  /* width: 100%; */
 }
 
 .bookmarks-container {
@@ -343,7 +352,8 @@ export default {
 .widgets-enter-from,
 .widgets-leave-to {
   opacity: 0;
-  transform: translateX(24px);
+  transform: translateY(-24px);
+  z-index: -1;
 }
 
 .bookmarks-enter-from,

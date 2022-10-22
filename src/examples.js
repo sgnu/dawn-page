@@ -67,7 +67,10 @@ const settings = {
   clock: {
     enabled: true,
     twentyFourHours: true,
-    seconds: true
+    showSeconds: true
+  },
+  notes: {
+    enabled: true,
   },
   weather: {
     enabled: true,

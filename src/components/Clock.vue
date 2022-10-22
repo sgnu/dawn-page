@@ -1,9 +1,13 @@
 <script>
 export default {
     name: 'Clock',
+    props: {
+        propSettings: Object
+    },
     data() {
         return {
             dateTime: {
+                dateObject: undefined,
                 year: 0,
                 month: '',
                 date: 0,
@@ -12,22 +16,39 @@ export default {
                 minutes: 0,
                 seconds: 0
             },
-            timer: undefined
+            timer: undefined,
+            settings: this.propSettings
         }
     },
     methods: {
         setDateTime() {
-            const date = new Date()
-            this.dateTime.year = date.getFullYear()
-            this.dateTime.month = new Intl.DateTimeFormat('en-us', { month: 'long' }).format(date.getMonth())
-            this.dateTime.date = date.getDate()
-            this.dateTime.weekday = new Intl.DateTimeFormat('en-us', { weekday: 'long' }).format(date.getDay())
-            this.dateTime.hours = date.getHours()
-            this.dateTime.minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()
-            this.dateTime.seconds = date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds()
+            this.dateTime.dateObject = new Date()
+            this.dateTime.year = this.dateTime.dateObject.getFullYear()
+            this.dateTime.month = new Intl.DateTimeFormat('en-us', { month: 'long' }).format(this.dateTime.dateObject.getMonth())
+            this.dateTime.date = this.dateTime.dateObject.getDate()
+            this.dateTime.weekday = new Intl.DateTimeFormat('en-us', { weekday: 'long' }).format(this.dateTime.dateObject.getDay())
+            this.dateTime.hours = this.dateTime.dateObject.getHours()
+            this.dateTime.minutes = this.dateTime.dateObject.getMinutes() < 10 ? `0${this.dateTime.dateObject.getMinutes()}` : this.dateTime.dateObject.getMinutes()
+            this.dateTime.seconds = this.dateTime.dateObject.getSeconds() < 10 ? `0${this.dateTime.dateObject.getSeconds()}` : this.dateTime.dateObject.getSeconds()
         }
     },
-    mounted() {
+    computed: {
+        getTime() {
+            const timeSettings = {
+                hour: 'numeric',
+                hour12: !this.settings.clock.twentyFourHours,
+                minute: 'numeric'
+            }
+            if (this.settings.clock.showSeconds) {
+                timeSettings.second = 'numeric'
+            }
+            return this.dateTime.dateObject.toLocaleString(navigator.language, timeSettings)
+        },
+        getHours() {
+            return this.dateTime.dateObject.toLocaleString(navigator.language, { hour: 'numeric', hour12: !this.settings.clock.twentyFourHours })
+        }
+    },
+    created() {
         this.setDateTime()
         this.timer = setInterval(this.setDateTime, 1000)
     },
@@ -39,7 +60,7 @@ export default {
 
 <template>
     <div>
-        <h1>{{dateTime.hours}}:{{dateTime.minutes}}:{{dateTime.seconds}}</h1>
+        <h1>{{getTime}}</h1>
         <p>{{dateTime.weekday}} {{dateTime.month}} {{dateTime.date}}, {{dateTime.year}}</p>
     </div>
 </template>
@@ -53,7 +74,6 @@ div {
 
     text-align: center;
 
-    width: 100%;
     padding: 16px;
 }
 

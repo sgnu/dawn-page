@@ -10,6 +10,15 @@ export default {
             settings: this.propSettings
         }
     },
+    methods: {
+        hiddenFieldFocused(element) {
+            element.target.type = 'text'
+        },
+
+        hiddenFieldBlurred(element) {
+            element.target.type = 'password'
+        }
+    }
 }
 </script>
 
@@ -19,12 +28,57 @@ export default {
             <div class="settings-inner-shape" @click.stop="">
                 <h1>Clock</h1>
                 <div class="setting">
-                    <span class="setting-label">Enable Clock</span>
+                    <span class="setting-label">Enable clock</span>
                     <label class="switch">
                         <input type="checkbox" v-model="settings.clock.enabled" />
                         <span class="slider"></span>
                     </label>
                 </div>
+                <div class="setting">
+                    <span class="setting-label">Show seconds</span>
+                    <label class="switch">
+                        <input type="checkbox" v-model="settings.clock.showSeconds" />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="setting">
+                    <span class="setting-label">Use 24-hour format</span>
+                    <label class="switch">
+                        <input type="checkbox" v-model="settings.clock.twentyFourHours" />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <h1>Notes</h1>
+                <div class="setting">
+                    <span class="setting-label">Enable notes</span>
+                    <label class="switch">
+                        <input type="checkbox" v-model="settings.notes.enabled" />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <h1>Weather</h1>
+                <div class="setting">
+                    <span class="setting-label">Enable weather</span>
+                    <label class="switch">
+                        <input type="checkbox" v-model="settings.weather.enabled" />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="setting">
+                    <label class="label-text">API Key <a href="https://openweathermap.org/" target="_blank">(?)</a></label>
+                    <input type="password" v-model="settings.weather.apiKey"
+                    @blur="hiddenFieldBlurred"
+                    @focus="hiddenFieldFocused"/>
+                </div>
+                <div class="setting">
+                    <label class="label-text">Location <a href="https://openweathermap.org/current#name" target="_blank">(?)</a></label>
+                    <input type="text"
+                    v-model="settings.weather.locationData" />
+                </div>
+
             </div>
         </Transition>
     </div>
@@ -70,9 +124,20 @@ export default {
     width: 100%;
 }
 
+input[type="password"],
+input[type="text"] {
+    float: right;
+    border-bottom: 2px solid var(--ctp-mocha-text);
+
+    margin-bottom: 4px;
+}
+
 h1 {
     color: var(--ctp-mocha-text);
+    font-size: 24px;
+
     margin: 0;
+    margin-bottom: 8px;
 }
 
 .setting-label {
@@ -81,6 +146,16 @@ h1 {
 
     line-height: 24px;
     margin-right: 8px;
+}
+
+.label-text {
+    color: var(--ctp-mocha-subtext1);
+}
+
+a {
+    color: var(--ctp-mocha-blue);
+    border-bottom: 1px dashed var(--ctp-mocha-blue);
+    text-decoration: none;
 }
 
 .switch {

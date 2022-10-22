@@ -5,8 +5,10 @@ body {
   background-color: var(--ctp-mocha-crust);
   font-family: 'Noto Sans', sans-serif;
 
+  overflow-x: hidden;
 }
 
+input[type="password"],
 input[type="text"] {
   box-sizing: border-box;
   background: none;
