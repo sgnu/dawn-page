@@ -28,7 +28,9 @@ export default {
       selectedIndex: 0,
       tempBookmark: undefined,
       creatorButtonText: 'Add',
-      settings: undefined
+      settings: undefined,
+      weatherData: undefined,
+      weatherRefresh: undefined
     }
   },
   created() {
@@ -42,6 +44,10 @@ export default {
 
     if (!this.settings) {
       this.settings = settings
+    }
+
+    if (this.settings.weather.enabled) {
+      this.weatherAPICall();
     }
 
     // this.bookmarkList = examples
@@ -59,7 +65,7 @@ export default {
       if (event) {
         if (event.keyCode === 8 || (event.keyCode >= 48 && event.keyCode <= 90)) {  // alphanumeric keycodes are 48 to 90 inclusive; 8 is backspace
           this.selectedIndex = 0
-        } 
+        }
       }
       const arr = []
       this.bookmarkList.forEach(bookmark => {
@@ -99,7 +105,7 @@ export default {
       } else {
         // javascript doesn't handle negative modulo properly
         if (this.selectedIndex === 0) {
-          this.selectedIndex = this.searchedList.length -1
+          this.selectedIndex = this.searchedList.length - 1
         } else {
           this.selectedIndex = (this.selectedIndex - 1) % this.searchedList.length
         }
@@ -119,7 +125,7 @@ export default {
         this.toggleBookmarkCreator(false)
         this.searchBookmarks()
         this.saveToLocalStorage()
-      }  else {
+      } else {
         window.alert(`Invalid URL! ${bookmark.url}`)
       }
     },
@@ -128,7 +134,7 @@ export default {
       this.bookmarkList = this.bookmarkList.filter(listedBookmark => {
         return bookmark.name !== listedBookmark.name &&
           bookmark.url !== listedBookmark.url &&
-          bookmark.shortForm  !== listedBookmark.shortForm
+          bookmark.shortForm !== listedBookmark.shortForm
       })
       this.saveToLocalStorage()
       this.searchBookmarks()
@@ -140,7 +146,7 @@ export default {
     },
 
     sortBookmarks() {
-      this.bookmarkList.sort((a, b) => { return (a.shortForm.toLowerCase() > b.shortForm.toLowerCase())})
+      this.bookmarkList.sort((a, b) => { return (a.shortForm.toLowerCase() > b.shortForm.toLowerCase()) })
     },
 
     toggleSettings(toggled) {
@@ -166,19 +172,19 @@ export default {
         this.tempBookmark = undefined
       }
     },
-    
+
     verifyUrl(url) {
-      const urlPattern = new RegExp('^(https?:\\/\\/)?'+ // validate protocol
-	    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // validate domain name
-	    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // validate OR ip (v4) address
-	    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // validate port and path
-	    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // validate query string
-	    '(\\#[-a-z\\d_]*)?$','i'); // validate fragment locatornew RegExp('(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?');
+      const urlPattern = new RegExp('^(https?:\\/\\/)?' + // validate protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // validate domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))' + // validate OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // validate port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?' + // validate query string
+        '(\\#[-a-z\\d_]*)?$', 'i'); // validate fragment locatornew RegExp('(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?');
       return !!urlPattern.test(url)
     },
 
     bookmarksBeforeLeave(element) {
-      const {marginLeft, marginTop, width, height} = window.getComputedStyle(element)
+      const { marginLeft, marginTop, width, height } = window.getComputedStyle(element)
 
       element.style.left = `${element.offsetLeft - parseFloat(marginLeft, 10)}px`
       element.style.top = `${element.offsetTop - parseFloat(marginTop, 10)}px`
@@ -187,61 +193,63 @@ export default {
     },
 
     widgetsBeforeLeave(element) {
-      const {marginLeft, marginTop, width, height} = window.getComputedStyle(element)
+      const { marginLeft, marginTop, width, height } = window.getComputedStyle(element)
 
       element.style.width = width
       element.style.height = height
+    },
+
+    async weatherAPICall() {
+      if (this.settings.weather.apiKey && this.settings.weather.locationData) {
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${this.settings.weather.locationData}&appid=${this.settings.weather.apiKey}&units=imperial`
+        const response = await fetch(url)
+        response.json().then(data => {
+          this.weatherData = data
+          this.weatherRefresh = setTimeout(this.weatherAPICall, 60000 * 5) // success; refresh in 5 minutes
+        }).catch(e => {
+          this.weatherData = undefined
+          this.weatherRefresh = setTimeout(this.weatherAPICall, 5000) // failed; retry in 5 seconds
+        })
+      } else {
+        this.weatherData = undefined
+        this.weatherRefresh = setTimeout(this.weatherAPICall, 5000) // failed; retry in 5 seconds
+      }
     }
   }
 }
 </script>
 
 <template>
-  <font-awesome-icon class="nav-button add-button" icon="fa-solid fa-plus" @click="toggleBookmarkCreator(true, false)" />
+  <font-awesome-icon class="nav-button add-button" icon="fa-solid fa-plus"
+    @click="toggleBookmarkCreator(true, false)" />
   <font-awesome-icon class="nav-button settings-button" icon="fa-solid fa-gear" @click="toggleSettings(true)" />
 
   <Transition name="creator">
-    <BookmarkCreator v-if="showCreator"
-      :bookmark="tempBookmark"
-      :buttonText="creatorButtonText"
-      @addBookmark="addBookmark"
-      @hideBookmarkCreator="toggleBookmarkCreator" />
+    <BookmarkCreator v-if="showCreator" :bookmark="tempBookmark" :buttonText="creatorButtonText"
+      @addBookmark="addBookmark" @hideBookmarkCreator="toggleBookmarkCreator" />
   </Transition>
 
   <Transition name="settings">
-    <Settings v-if="showSettings"
-    :prop-settings="settings"
-    @hideSettings="toggleSettings" />
+    <Settings v-if="showSettings" :prop-settings="settings" @hideSettings="toggleSettings" />
   </Transition>
 
-  <input id="search-bar"
-    ref="searchBar"
-    type="text"
-    v-model="searchText"
-    @keyup="searchBookmarks"
-    @keyup.enter="submitSearch"
-    @keyup.esc="clearSearch"
-    @keydown.tab.exact.prevent="cycleBookmarks(true)"
+  <input id="search-bar" ref="searchBar" type="text" v-model="searchText" @keyup="searchBookmarks"
+    @keyup.enter="submitSearch" @keyup.esc="clearSearch" @keydown.tab.exact.prevent="cycleBookmarks(true)"
     @keydown.tab.shift.exact.prevent="cycleBookmarks(false)">
 
   <div class="main-container">
     <div class="bookmarks-container">
-      <TransitionGroup name="bookmarks"
-        @before-leave="bookmarksBeforeLeave">
-        <Bookmark v-for="(bookmark, index) in searchedList"
-          @editBookmark="editBookmark"
-          @deleteBookmark="deleteBookmark"
-          :bookmark="bookmark" :key="bookmark.shortForm"
-          :data-index="index"
+      <TransitionGroup name="bookmarks" @before-leave="bookmarksBeforeLeave">
+        <Bookmark v-for="(bookmark, index) in searchedList" @editBookmark="editBookmark"
+          @deleteBookmark="deleteBookmark" :bookmark="bookmark" :key="bookmark.shortForm" :data-index="index"
           :selected="searchedList.length !== 0 && bookmark.shortForm === searchedList[selectedIndex].shortForm" />
       </TransitionGroup>
     </div>
     <div class="widgets-container">
-      <TransitionGroup name="widgets"
-      @before-leave="widgetsBeforeLeave" >
-        <Clock key="clock" v-if="settings.clock.enabled" :prop-settings="settings"/>
+      <TransitionGroup name="widgets" @before-leave="widgetsBeforeLeave">
+        <Clock key="clock" v-if="settings.clock.enabled" :prop-settings="settings" />
         <Notes key="notes" v-if="settings.notes.enabled" />
-        <Weather key="weather" v-if="settings.weather.enabled" />
+        <Weather key="weather" v-if="settings.weather.enabled && this.weatherData" :weather-data="weatherData" />
       </TransitionGroup>
     </div>
   </div>

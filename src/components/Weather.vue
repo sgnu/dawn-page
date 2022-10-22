@@ -1,28 +1,13 @@
 <script>
-import { weatherData } from '../examples'
-
 export default {
     name: 'Weather',
+    props: {
+        weatherData: Object
+    },
     data() {
         return {
-            weather: weatherData,
+            weather: this.weatherData,
         }
-    },
-    methods: {
-        async apiCall() { // TODO: should get passed api key and location data via props
-            const apiKey = ''
-            const location = ''
-
-            const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}&units=imperial`
-            const response = await fetch(url)
-            response.json().then(data => {
-                console.log(data)
-                this.weather = data
-            })
-        }
-    },
-    mounted() {
-        // this.apiCall()
     }
 }
 </script>
