@@ -22,8 +22,8 @@ const bookmarks = [
 const settings = {
   clock: {
     enabled: true,
-    twentyFourHours: true,
-    showSeconds: true
+    twentyFourHours: false,
+    showSeconds: false
   },
   notes: {
     enabled: true,
