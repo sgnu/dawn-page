@@ -31,7 +31,7 @@ export default {
         if (storedNotes) {
             this.notes = storedNotes
         } else {
-            this.notes = ''
+            this.notes = '# Notes'
         }
     }
 }

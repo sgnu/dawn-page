@@ -6,7 +6,7 @@ import Notes from './components/Notes.vue'
 import Settings from './components/Settings.vue'
 import Weather from './components/Weather.vue'
 
-import { settings } from './examples'
+import { bookmarks, settings } from './defaults'
 
 export default {
   name: 'App',
@@ -39,7 +39,7 @@ export default {
     if (storedBookmarks) {
       this.bookmarkList = JSON.parse(storedBookmarks) // should do some verification that it's an array of bookmarks
     } else {
-      this.bookmarkList = [] // create an empty array to use as bookmark list
+      this.bookmarkList = bookmarks // load default to use as bookmark list
     }
 
     this.loadSettings()
