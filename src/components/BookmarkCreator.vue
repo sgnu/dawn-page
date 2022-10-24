@@ -187,12 +187,12 @@ input[type="button"]:hover {
 
 .v-enter-active,
 .v-leave-active {
-    transition: translate 0.167s ease-in;
+    transition: translate 0.167s ease-out;
 }
 
 .v-enter-from,
 .v-leave-to {
-    translate: 0 -32px;
+    translate: 0 -64px;
 }
 
 .vacp-color-picker {
