@@ -6,30 +6,14 @@ export default {
     },
     data() {
         return {
-            dateTime: {
-                dateObject: undefined,
-                year: 0,
-                month: '',
-                date: 0,
-                weekday: '',
-                hours: 0,
-                minutes: 0,
-                seconds: 0
-            },
+            dateObject: undefined,
             timer: undefined,
             settings: this.propSettings
         }
     },
     methods: {
         setDateTime() {
-            this.dateTime.dateObject = new Date()
-            this.dateTime.year = this.dateTime.dateObject.getFullYear()
-            this.dateTime.month = new Intl.DateTimeFormat('en-us', { month: 'long' }).format(this.dateTime.dateObject.getMonth())
-            this.dateTime.date = this.dateTime.dateObject.getDate()
-            this.dateTime.weekday = new Intl.DateTimeFormat('en-us', { weekday: 'long' }).format(this.dateTime.dateObject.getDay())
-            this.dateTime.hours = this.dateTime.dateObject.getHours()
-            this.dateTime.minutes = this.dateTime.dateObject.getMinutes() < 10 ? `0${this.dateTime.dateObject.getMinutes()}` : this.dateTime.dateObject.getMinutes()
-            this.dateTime.seconds = this.dateTime.dateObject.getSeconds() < 10 ? `0${this.dateTime.dateObject.getSeconds()}` : this.dateTime.dateObject.getSeconds()
+            this.dateObject = new Date()
         }
     },
     computed: {
@@ -42,10 +26,16 @@ export default {
             if (this.settings.clock.showSeconds) {
                 timeSettings.second = 'numeric'
             }
-            return this.dateTime.dateObject.toLocaleString(navigator.language, timeSettings)
+            return this.dateObject.toLocaleString(navigator.language, timeSettings)
         },
-        getHours() {
-            return this.dateTime.dateObject.toLocaleString(navigator.language, { hour: 'numeric', hour12: !this.settings.clock.twentyFourHours })
+        getDate() {
+            const dateSettings = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            }
+            return this.dateObject.toLocaleString(navigator.language, dateSettings)
         }
     },
     created() {
@@ -61,7 +51,7 @@ export default {
 <template>
     <div>
         <h1>{{getTime}}</h1>
-        <p>{{dateTime.weekday}} {{dateTime.month}} {{dateTime.date}}, {{dateTime.year}}</p>
+        <p>{{getDate}}</p>
     </div>
 </template>
 
