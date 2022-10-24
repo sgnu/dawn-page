@@ -77,7 +77,7 @@ export default {
     },
 
     submitSearch() {
-      const target = '_blank' // open in new tab while testing; use _self to open in urrent
+      const target = '_self'
       if (this.searchedList[this.selectedIndex]) {
         window.open(this.searchedList[this.selectedIndex].url, target)
       } else {
