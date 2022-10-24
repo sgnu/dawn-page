@@ -1,29 +1,17 @@
 # dawn-page
 
-This template should help get you started developing with Vue 3 in Vite.
+Dawn Page is a replacement page for your brower's new tabs.
+[A demo is available to try here.](https://sgnu.github.io/dawn-page)
 
-## Recommended IDE Setup
+## Deploy locally
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
+If you'd like to host Dawn Page locally:
 
 ```sh
+git clone https://github.com/sgnu/dawn-page.git
+cd dawn-page
 npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
 npm run build
 ```
+
+The necessary files can then be found in `dist`
