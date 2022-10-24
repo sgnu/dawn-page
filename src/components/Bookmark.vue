@@ -12,15 +12,17 @@ export default {
     },
     emits: ['editBookmark', 'deleteBookmark'],
     methods: {
-        openWindow() {
-            window.open(this.bookmark.url, '_self') // opens in current tab and not a new one
+        openWindow(target) {
+            window.open(this.bookmark.url, target) // opens in current tab and not a new one
         }
     }
 }
 </script>
 
 <template>
-    <div class="bookmark" v-on:click="openWindow" v-bind:class="{selected: selected}">
+    <div class="bookmark" @click="openWindow('_self')"
+    @click.middle="openWindow('_blank')"
+    v-bind:class="{selected: selected}" >
         <div class="container">
             <h1 class="short-form" :style="{ 'color': bookmark.color }">{{ bookmark.shortForm }}</h1>
             <p class="name">{{ bookmark.name }}</p>
