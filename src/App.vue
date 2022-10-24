@@ -288,7 +288,8 @@ export default {
 
   <input id="search-bar" ref="searchBar" type="text" v-model="searchText" @keyup="searchBookmarks"
     @keyup.enter="submitSearch" @keyup.esc="clearSearch" @keydown.tab.exact.prevent="cycleBookmarks(true)"
-    @keydown.tab.shift.exact.prevent="cycleBookmarks(false)" spellcheck="false">
+    @keydown.tab.shift.exact.prevent="cycleBookmarks(false)" spellcheck="false"
+    :class="searchText ? 'expanded' : ''">
 
   <div class="main-container">
     <div class="bookmarks-container">
@@ -353,19 +354,23 @@ export default {
   box-sizing: border-box;
   border-bottom: 2px solid var(--ctp-mocha-subtext0);
   color: var(--ctp-mocha-subtext0);
+  align-self: start;
 
   font-size: 24px;
 
   width: 240px;
   padding: 4px 2px;
 
-  transition: border 0.167s ease-out,
-    color 0.167s ease-out
+  transition: all 0.167s ease-out
 }
 
 #search-bar:focus {
   border-color: var(--ctp-mocha-pink);
   color: var(--ctp-mocha-pink);
+}
+
+#search-bar.expanded {
+  width: calc(66.67% - 16px);
 }
 
 .main-container {
