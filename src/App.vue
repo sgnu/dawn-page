@@ -87,7 +87,7 @@ export default {
           window.open(`https://google.com/search?q=${encodeURIComponent(this.searchText.substring(2))}`, target)
         } else if (this.searchText.substring(0, 2) === 'y ') {
           window.open(`https://youtube.com/results?search_query=${encodeURIComponent(this.searchText.substring(2))}`, target)
-        } else if (this.searchText.charAt(0, 3) === '/r/') {
+        } else if (this.searchText.substring(0, 3) === '/r/') {
           window.open(`https://reddit.com${this.searchText}`, target)
         } else if (this.verifyUrl(this.searchText)) {
           window.open(this.appendHttp(this.searchText), target)
