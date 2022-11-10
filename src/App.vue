@@ -1,4 +1,5 @@
 <script>
+import Anime from './components/Anime.vue'
 import Bookmark from './components/Bookmark.vue'
 import BookmarkCreator from './components/BookmarkCreator.vue'
 import Clock from './components/Clock.vue'
@@ -7,10 +8,12 @@ import Settings from './components/Settings.vue'
 import Weather from './components/Weather.vue'
 
 import { bookmarks, settings } from './defaults'
+import { query } from './animeQuery'
 
 export default {
   name: 'App',
   components: {
+    Anime,
     Bookmark,
     BookmarkCreator,
     Clock,
@@ -22,6 +25,8 @@ export default {
     return {
       bookmarkList: Array,
       searchedList: Array,
+      aniList: Array,
+      aniListRefresh: undefined,
       searchText: '',
       showCreator: false,
       showSettings: false,
@@ -50,6 +55,9 @@ export default {
     // this.bookmarkList = examples
     this.sortBookmarks()
     this.searchedList = this.bookmarkList
+
+    this.aniListApiCall()
+    this.aniListRefresh = setInterval(this.aniListApiCall, 30000) // refresh every 30 seconds
   },
   mounted() {
     this.$nextTick(() => {
@@ -266,6 +274,32 @@ export default {
       } else {
         this.weatherData = undefined
       }
+    },
+
+    async aniListApiCall() {
+      if (this.settings.anime.enabled && this.settings.anime.userName) {
+        const url = 'https://graphql.anilist.co'
+        const variables = {
+          userName: this.settings.anime.userName
+        }
+        const options = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            query: query,
+            variables: variables
+          })
+        }
+
+        const response = await fetch(url, options).then(r => {
+          return r.json()
+        })
+
+        this.aniList = response['data']['Page']['mediaList']
+      }
     }
   },
   beforeUnmount() {
@@ -306,6 +340,7 @@ export default {
         <Clock key="clock" v-if="settings.clock.enabled" :prop-settings="settings" />
         <Notes key="notes" v-if="settings.notes.enabled" />
         <Weather key="weather" v-if="settings.weather.enabled && weatherData" :weather="weatherData" />
+        <Anime key="anime" v-if="settings.anime.enabled && aniList" :aniList="aniList"/>
       </TransitionGroup>
     </div>
   </div>

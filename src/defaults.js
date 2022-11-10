@@ -20,6 +20,10 @@ const bookmarks = [
 ]
 
 const settings = {
+  anime: {
+    enabled: false,
+    userName: ''
+  },
   clock: {
     enabled: true,
     twentyFourHours: false,

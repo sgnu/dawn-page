@@ -85,6 +85,20 @@ export default {
                     </label>
                 </div>
 
+                <h1>AniList</h1>
+                <div class="setting">
+                    <span class="setting-label">Enable AniList</span>
+                    <label class="switch">
+                        <input type="checkbox" v-model="settings.anime.enabled" />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="setting">
+                    <label class="label-text">Username</label>
+                    <input type="text"
+                    v-model="settings.anime.userName" />
+                </div>
+
             </div>
         </Transition>
     </div>
