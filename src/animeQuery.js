@@ -6,19 +6,16 @@ const query = `
                 title {
                 romaji
                 },
-                endDate {
-                year
-                month
-                day
-                },
                 episodes,
                 nextAiringEpisode {
                 timeUntilAiring
                 },
                 coverImage {
-                medium
+                large
                 },
-                siteUrl
+                siteUrl,
+                season,
+                seasonYear
             },
             progress
             }

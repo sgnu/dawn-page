@@ -10,6 +10,29 @@ import Weather from './components/Weather.vue'
 import { bookmarks, settings } from './defaults'
 import { query } from './animeQuery'
 
+const animeSeasons = ['SPRING', 'SUMMER', 'FALL', 'WINTER']
+
+/**
+ * Sort anime by release season and romanized title, desc.
+ * @param {*} a 
+ * @param {*} b 
+ */
+function sortAnime(a, b) {
+  if (a.media.seasonYear > b.media.seasonYear) {
+    return -1
+  } else if (a.media.seasonYear === b.media.seasonYear) {
+    if (animeSeasons.indexOf(a.media.season) > animeSeasons.indexOf(b.media.season)) {
+      return -1
+    } else if (a.media.season = b.media.season) {
+      return a.media.title.romaji.localeCompare(b.media.title.romaji)
+    } else {
+      return 1
+    }
+  } else {
+    return 1
+  }
+}
+
 export default {
   name: 'App',
   components: {
@@ -25,7 +48,7 @@ export default {
     return {
       bookmarkList: Array,
       searchedList: Array,
-      aniList: Array,
+      aniList: [],
       aniListRefresh: undefined,
       searchText: '',
       showCreator: false,
@@ -299,6 +322,7 @@ export default {
         })
 
         this.aniList = response['data']['Page']['mediaList']
+        this.aniList.sort(sortAnime)
       }
     }
   },
@@ -340,7 +364,7 @@ export default {
         <Clock key="clock" v-if="settings.clock.enabled" :prop-settings="settings" />
         <Notes key="notes" v-if="settings.notes.enabled" />
         <Weather key="weather" v-if="settings.weather.enabled && weatherData" :weather="weatherData" />
-        <Anime key="anime" v-if="settings.anime.enabled && aniList" :aniList="aniList"/>
+        <Anime key="anime" v-if="settings.anime.enabled && aniList.length" :aniList="aniList"/>
       </TransitionGroup>
     </div>
   </div>
@@ -407,14 +431,14 @@ export default {
 }
 
 #search-bar.expanded {
-  width: calc(66.67% - 16px);
+  width: calc(60% - 8px);
 }
 
 .main-container {
   margin-top: 24px;
   display: grid;
   gap: 16px;
-  grid-template-columns: 5fr 4fr;
+  grid-template-columns: 6fr 4fr;
   grid-template-rows: auto;
   justify-content: center;
   /* justify-items: start; */
