@@ -414,7 +414,7 @@ export default {
   margin-top: 24px;
   display: grid;
   gap: 16px;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 5fr 4fr;
   grid-template-rows: auto;
   justify-content: center;
   /* justify-items: start; */
