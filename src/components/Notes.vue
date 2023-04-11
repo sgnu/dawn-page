@@ -38,7 +38,7 @@ export default {
 </script>
 
 <template>
-    <div class="notes-container" @click.stop.prevent="toggleEditing(true)">
+    <div :class="{ editing: this.editing }" class="notes-container" @click.stop.prevent="toggleEditing(true)">
         <textarea rows="8" id="notes-text-box" ref="text" v-if="editing" v-model="notes" @blur="toggleEditing(false)"></textarea>
         <div class="rendered" v-if="!editing" v-html="markdownToHTML"></div>
     </div>
@@ -57,6 +57,17 @@ export default {
     width: 100%;
     /* max-width: 420px; */
     padding: 16px;
+    height: 192px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: 0;
+    
+
+    transition: height 0.167s ease-out
+}
+
+.notes-container.editing {
+    height: 320px;
 }
 
 textarea {
