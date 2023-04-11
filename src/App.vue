@@ -286,15 +286,31 @@ export default {
     async weatherAPICall() {
       if (this.settings.weather.enabled && this.settings.weather.apiKey && this.settings.weather.locationData) {
         const units = this.settings.weather.useImperial ? 'imperial' : 'metric'
-        const url = `https://api.openweathermap.org/data/2.5/weather?q=${this.settings.weather.locationData}&appid=${this.settings.weather.apiKey}&units=${units}`
-        const response = await fetch(url)
-        response.json().then(data => {
-          this.weatherData = data
-          this.weatherData.useImperial = this.settings.weather.useImperial
-        }).catch(e => {
-          this.weatherData = undefined
-        })
-      } else {
+        const storedData = JSON.parse(localStorage.getItem('dawn-weather'))
+        let isOldDate = true
+        if (storedData && storedData.updateTime) { // check if any weather information already exists
+          const currentDate = new Date()
+          const oldDate = new Date(storedData.updateTime)
+          const msDifference = Math.abs(currentDate - oldDate)
+          console.log(msDifference)
+          isOldDate = (msDifference >= 15 * 60 * 1000) // 15 minutes
+        }
+
+        if (isOldDate) {
+          const url = `https://api.openweathermap.org/data/2.5/weather?q=${this.settings.weather.locationData}&appid=${this.settings.weather.apiKey}&units=${units}`
+          const response = await fetch(url)
+          response.json().then(data => {
+            this.weatherData = data
+            this.weatherData.updateTime = new Date()
+            this.weatherData.useImperial = this.settings.weather.useImperial
+            localStorage.setItem('dawn-weather', JSON.stringify(this.weatherData))
+          }).catch(e => {
+            this.weatherData = undefined
+          })
+        } else {
+          this.weatherData = storedData
+        }
+      } else {  // weather is disabled or not configured
         this.weatherData = undefined
       }
     },
@@ -363,7 +379,7 @@ export default {
       <TransitionGroup name="widgets" @before-leave="widgetsBeforeLeave">
         <Clock key="clock" v-if="settings.clock.enabled" :prop-settings="settings" />
         <Notes key="notes" v-if="settings.notes.enabled" />
-        <Weather key="weather" v-if="settings.weather.enabled && weatherData" :weather="weatherData" />
+        <Weather key="weather" v-if="settings.weather.enabled && weatherData" :weather="weatherData" :prop-settings="settings" />
         <Anime key="anime" v-if="settings.anime.enabled && aniList.length" :aniList="aniList"/>
       </TransitionGroup>
     </div>
