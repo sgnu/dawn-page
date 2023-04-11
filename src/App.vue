@@ -292,7 +292,6 @@ export default {
           const currentDate = new Date()
           const oldDate = new Date(storedData.updateTime)
           const msDifference = Math.abs(currentDate - oldDate)
-          console.log(msDifference)
           isOldDate = (msDifference >= 15 * 60 * 1000) // 15 minutes
         }
 
