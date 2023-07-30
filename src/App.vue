@@ -7,8 +7,11 @@ import Notes from './components/Notes.vue'
 import Settings from './components/Settings.vue'
 import Weather from './components/Weather.vue'
 
+import fuzzysort from 'fuzzysort'
+
 import { bookmarks, settings } from './defaults'
 import { query } from './animeQuery'
+import { options } from 'marked'
 
 const animeSeasons = ['SPRING', 'SUMMER', 'FALL', 'WINTER']
 
@@ -95,16 +98,31 @@ export default {
           this.selectedIndex = 0
         }
       }
-      const arr = []
-      this.bookmarkList.forEach(bookmark => {
-        const searchCondition = bookmark.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
-          bookmark.shortForm.toLowerCase().includes(this.searchText.toLowerCase())
-        if (searchCondition) {
-          arr.push(bookmark)
-        }
+
+      if (this.searchText === '') {   // fuzzysort doesn't search if the term is empty
+        this.searchedList = this.bookmarkList
+        return
+      }
+
+      const arr = fuzzysort.go(this.searchText, this.bookmarkList, {
+        keys: ['name', 'shortForm', 'url']
       })
 
-      this.searchedList = arr
+      const builtList = []
+      arr.forEach(result => {
+        builtList.push(result.obj)
+      })
+
+      // const arr = []
+      // this.bookmarkList.forEach(bookmark => {
+      //   const searchCondition = bookmark.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
+      //     bookmark.shortForm.toLowerCase().includes(this.searchText.toLowerCase())
+      //   if (searchCondition) {
+      //     arr.push(bookmark)
+      //   }
+      // })
+
+      this.searchedList = builtList
     },
 
     submitSearch() {
