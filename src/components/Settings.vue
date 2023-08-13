@@ -26,6 +26,11 @@ export default {
     <div class="settings-container" @click="$emit('hideSettings', false)">
         <Transition appear>
             <div class="settings-inner-shape" @click.stop="">
+                <h1>Search</h1>
+                <div class="setting">
+                    <span class="setting-label">Search threshhold</span>
+                    <input type="text" v-model="settings.search.threshold"/>
+                </div>
                 <h1>Clock</h1>
                 <div class="setting">
                     <span class="setting-label">Enable clock</span>

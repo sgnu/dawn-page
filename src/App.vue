@@ -105,7 +105,8 @@ export default {
       }
 
       const arr = fuzzysort.go(this.searchText, this.bookmarkList, {
-        keys: ['name', 'shortForm', 'url']
+        keys: ['name', 'shortForm', 'url'],
+        threshold: -Math.abs(this.settings),
       })
 
       const builtList = []

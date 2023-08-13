@@ -32,6 +32,9 @@ const settings = {
   notes: {
     enabled: true,
   },
+  search: {
+    threshold: 'Infinity',
+  },
   weather: {
     enabled: true,
     apiKey: '',
